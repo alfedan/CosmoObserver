@@ -241,3 +241,8 @@ accéder au site généré :
 Concevoir le builde : 
 
         npm run build
+
+puis : 
+
+        npm install -g serve
+        serve -s dist
