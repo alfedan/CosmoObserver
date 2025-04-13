@@ -23,6 +23,16 @@ lance la CT et ouvre le terminal pour la met a jour
 
     apt update && apt upgrade -y
 
+installer sudo : 
+
+    apt install sudo
+
+obtenir l'ip de la CT : 
+
+    ip a
+
+rechercher quelque chose comme 192.168.X.XX
+
 -----------------------------------------------------------------
 # Installation de PocketBase
 
@@ -194,3 +204,40 @@ Essaie de cliquer dessus : si tout va bien, l’image s’affiche !
 
 # Installation de l'interface utilisateur : 
 
+Créer un dossier pour le site React : 
+
+        mkdir -p ~/cosmos-observer-site
+        cd ~/cosmos-observer-site
+
+Initialiser un projet React : 
+
+        sudo apt install npm -y
+
+puis une fois installer : 
+
+        npm create vite@latest
+
+Installer les dépendances utiles : 
+
+        npm install
+        npm install pocketbase react-router-dom framer-motion
+
+télécharge l'interface utilisateur : 
+
+        git clone https://github.com/alfedan/CosmoObserver
+
+Installer l'interface utilisateur : 
+
+        npm install
+
+lancer le test de l'interface utilisateur : 
+
+        npm run dev -- --host
+
+accéder au site généré : 
+
+        http://192.168.X.XX:5173
+
+Concevoir le builde : 
+
+        npm run build
