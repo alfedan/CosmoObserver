@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Mail, User, MessageSquare, Send } from 'lucide-react';
 import { StarField } from '../components/StarField';
-import { pb, isNetworkError } from '../lib/pocketbase';
+import { pb } from '../lib/pocketbase';
 
 export function Contact() {
   const [formData, setFormData] = useState({
@@ -51,20 +51,12 @@ export function Contact() {
         captcha: '',
         realCaptcha: Math.floor(Math.random() * 9000 + 1000).toString(),
       });
-    } catch (error: any) {
+    } catch (error) {
+      setStatus({
+        type: 'error',
+        message: 'Une erreur est survenue lors de l\'envoi du message.'
+      });
       console.error('Erreur:', error);
-      
-      if (isNetworkError(error)) {
-        setStatus({
-          type: 'error',
-          message: 'Impossible de se connecter au serveur. Veuillez vérifier votre connexion et réessayer.'
-        });
-      } else {
-        setStatus({
-          type: 'error',
-          message: 'Une erreur est survenue lors de l\'envoi du message.'
-        });
-      }
     }
   };
 

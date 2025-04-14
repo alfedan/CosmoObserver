@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Camera, Star, Sun, Moon, Menu, X, Salad as Galaxy, Telescope, Contact, User, ChevronRight, Home, ChevronDown } from 'lucide-react';
-import { pb, type PhotoRecord, isNetworkError } from './lib/pocketbase';
+import { pb, type PhotoRecord } from './lib/pocketbase';
 import { Contact as ContactPage } from './pages/Contact';
 import { StarField } from './components/StarField';
 
@@ -106,48 +106,30 @@ function NavigationMenu({ isOpen, onClose, currentPage, onPageChange }: {
 function HomePage({ onPageChange }: { onPageChange: (page: string) => void }) {
   const [photoOfTheDay, setPhotoOfTheDay] = useState<PhotoRecord | null>(null);
   const [recentPhotos, setRecentPhotos] = useState<PhotoRecord[]>([]);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    let isMounted = true;
-
     async function fetchPhotos() {
       try {
-        setError(null);
         const latestPhoto = await pb.collection('photos').getList(1, 1, {
           sort: '-created'
         });
         
-        if (!isMounted) return;
-
         if (latestPhoto.items.length > 0) {
           setPhotoOfTheDay(latestPhoto.items[0] as PhotoRecord);
+        }
 
-          const recent = await pb.collection('photos').getList(1, 2, {
-            sort: '-created',
-            filter: `id != '${latestPhoto.items[0].id}'`
-          });
-          
-          if (!isMounted) return;
-          setRecentPhotos(recent.items as PhotoRecord[]);
-        }
-      } catch (error: any) {
-        console.error('Erreur lors de la récupération des photos:', error);
-        if (!isMounted) return;
+        const recent = await pb.collection('photos').getList(1, 2, {
+          sort: '-created',
+          filter: `id != '${latestPhoto.items[0].id}'`
+        });
         
-        if (isNetworkError(error)) {
-          setError("Impossible de se connecter au serveur. Veuillez vérifier votre connexion et réessayer.");
-        } else {
-          setError("Une erreur est survenue lors du chargement des photos.");
-        }
+        setRecentPhotos(recent.items as PhotoRecord[]);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des photos:', error);
       }
     }
 
     fetchPhotos();
-
-    return () => {
-      isMounted = false;
-    };
   }, []);
 
   return (
@@ -160,12 +142,6 @@ function HomePage({ onPageChange }: { onPageChange: (page: string) => void }) {
         </div>
         <p className="text-xl text-gray-300">Exploration photographique de l'univers</p>
       </header>
-
-      {error && (
-        <div className="bg-red-900/50 text-red-200 p-4 rounded-lg mb-8 text-center">
-          {error}
-        </div>
-      )}
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
         <div className="col-span-full lg:col-span-2">
