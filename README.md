@@ -97,6 +97,27 @@ acces a pocketbase :
 
 Crée le compte administratif pour pocketbase
 
+Modification pour protection CORPS : 
+
+    nano /opt/pb_data/.pb_cors.json
+
+et coller le comptenu : 
+
+    {
+      "enabled": true,
+      "origins": [
+        "http://localhost:5173",
+        "http://192.168.X.XX:5173"
+      ],
+      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE"],
+      "headers": ["Authorization", "Content-Type"],
+      "exposeHeaders": [],
+      "maxAge": 86400,
+      "credentials": true
+    }
+
+
+
 -----------------------------------------------------------------------------------------------------------------------
 
 # Automatiser le démarrage de PocketBase au boot
@@ -111,7 +132,7 @@ colle le code :
     
     [Service]
     WorkingDirectory=/opt
-    ExecStart=/opt/pocketbase serve
+    ExecStart=/opt/pocketbase serve --http 0.0.0.0:8090 --dir /opt/pb_data
     Restart=on-failure
     RestartSec=5
     StandardOutput=journal
@@ -134,7 +155,7 @@ vérifier qu’il tourne avec :
 
 ---------------------------------------------------------------------------------------------------------------------------
 
-# créer la base de données
+# créer la base de données des photo
 
 ouvre la page web de pocketbase : 
 
@@ -200,6 +221,28 @@ Tu devrais voir une URL de fichier (quelque chose comme /api/files/xxxx/xxxxxx.j
 
 Essaie de cliquer dessus : si tout va bien, l’image s’affiche !
 
+# créer la base de bonner de sauvegarde des messages de contact
+
+dans l'interface de pocketbase cliquer sur "collections" puis "new colection"
+
+nom de la base : messages
+
+ajouter les champs : 
+
+text : name
+
+email : email
+
+text : subject
+
+text : message
+
+email : to
+
+changer API rules de tout les champs en :
+
+    @request.auth.id != "" || @request.auth.id = ""
+
 ------------------------------------------------------------------------------------------------------------------------------------
 
 # Installation de l'interface utilisateur : 
@@ -227,6 +270,10 @@ télécharge l'interface utilisateur :
         git clone https://github.com/alfedan/CosmoObserver
 
 Installer l'interface utilisateur : 
+
+        cd ~/cosmos-observer-site/CosmosObserver
+
+puis : 
 
         npm install
 
