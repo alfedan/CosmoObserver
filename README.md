@@ -1,4 +1,4 @@
-# CosmoObserver
+# CosmosObserver
 interface pour photo astronomique
 ---------------------------------------------------------------------
 # Installation de la CT débian 12 dans Proxmox 7
