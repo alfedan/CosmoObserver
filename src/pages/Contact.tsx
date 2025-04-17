@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, User, MessageSquare, Send } from 'lucide-react';
+import { Mail, Send } from 'lucide-react';
 import { toast } from 'sonner';
 import { StarField } from '../components/StarField';
 import { pb } from '../lib/pocketbase';
@@ -16,6 +16,15 @@ export function Contact() {
   });
 
   const [isLoading, setIsLoading] = useState(false);
+
+  // ✅ Fonction manquante
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,7 +47,7 @@ export function Contact() {
 
       toast.success('✅ Votre message a été envoyé avec succès !');
       confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-      
+
       setFormData({
         name: '',
         email: '',
@@ -68,7 +77,67 @@ export function Contact() {
             </h1>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Tous tes champs inchangés ici... */}
+              <div>
+                <label className="block mb-1 font-medium">Nom</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-700"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block mb-1 font-medium">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-700"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block mb-1 font-medium">Sujet</label>
+                <input
+                  type="text"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-700"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block mb-1 font-medium">Message</label>
+                <textarea
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-700"
+                  required
+                  rows={5}
+                />
+              </div>
+
+              <div>
+                <label className="block mb-1 font-medium">
+                  Code de vérification : <strong>{formData.realCaptcha}</strong>
+                </label>
+                <input
+                  type="text"
+                  name="captcha"
+                  value={formData.captcha}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-700"
+                  required
+                />
+              </div>
 
               <button
                 type="submit"

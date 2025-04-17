@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Camera, Star, Sun, Moon, Menu, X, Salad as Galaxy, Telescope, Contact, User, ChevronRight, Home, ChevronDown } from 'lucide-react';
 import { pb, type PhotoRecord } from './lib/pocketbase';
 import { Contact as ContactPage } from './pages/Contact';
+import { SkyCam } from './pages/SkyCam';
 import { StarField } from './components/StarField';
 import { Toaster } from 'sonner';
+import { HomePage } from './pages/Home';
+import { Moon as MoonPage } from './pages/Moon';
 
 function NavigationMenu({ isOpen, onClose, currentPage, onPageChange }: { 
   isOpen: boolean; 
@@ -104,153 +107,10 @@ function NavigationMenu({ isOpen, onClose, currentPage, onPageChange }: {
   );
 }
 
-function HomePage({ onPageChange }: { onPageChange: (page: string) => void }) {
-  const [photoOfTheDay, setPhotoOfTheDay] = useState<PhotoRecord | null>(null);
-  const [recentPhotos, setRecentPhotos] = useState<PhotoRecord[]>([]);
-
-  useEffect(() => {
-    async function fetchPhotos() {
-      try {
-        const latestPhoto = await pb.collection('photos').getList(1, 1, {
-          sort: '-created'
-        });
-        
-        if (latestPhoto.items.length > 0) {
-          setPhotoOfTheDay(latestPhoto.items[0] as PhotoRecord);
-        }
-
-        const recent = await pb.collection('photos').getList(1, 2, {
-          sort: '-created',
-          filter: `id != '${latestPhoto.items[0].id}'`
-        });
-        
-        setRecentPhotos(recent.items as PhotoRecord[]);
-      } catch (error) {
-        console.error('Erreur lors de la récupération des photos:', error);
-      }
-    }
-
-    fetchPhotos();
-  }, []);
-
-  return (
-    <div className="container mx-auto px-4 py-12">
-      <header className="text-center mb-16">
-        <div className="flex justify-center items-center gap-4 mb-4">
-          <Camera className="w-10 h-10 text-blue-400" />
-          <h1 className="text-4xl md:text-6xl font-bold">Cosmos Observer</h1>
-          <Star className="w-10 h-10 text-yellow-300" />
-        </div>
-        <p className="text-xl text-gray-300">Exploration photographique de l'univers</p>
-      </header>
-
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-        <div className="col-span-full lg:col-span-2">
-          <div className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-lg h-full">
-            <h2 className="text-2xl font-semibold mb-6 flex items-center gap-2">
-              <Camera className="w-6 h-6 text-blue-400" />
-              Photo du Jour
-            </h2>
-            {photoOfTheDay ? (
-              <>
-                <img
-                  src={pb.files.getUrl(photoOfTheDay, photoOfTheDay.image)}
-                  alt={photoOfTheDay.title}
-                  className="w-full h-[400px] object-cover rounded-lg mb-4"
-                />
-                <p className="text-lg text-gray-300">{photoOfTheDay.title}</p>
-                <p className="text-sm text-gray-400">{photoOfTheDay.description}</p>
-              </>
-            ) : (
-              <img
-                src="https://images.unsplash.com/photo-1419242902214-272b3f66ee7a"
-                alt="Photo astronomique du jour"
-                className="w-full h-[400px] object-cover rounded-lg mb-4"
-              />
-            )}
-          </div>
-        </div>
-
-        <div className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-lg">
-          <h2 className="text-2xl font-semibold mb-6 flex items-center gap-2">
-            <Moon className="w-6 h-6 text-gray-300" />
-            Dernières Captures
-          </h2>
-          <div className="space-y-4">
-            {recentPhotos.length > 0 ? (
-              recentPhotos.map((photo) => (
-                <div key={photo.id}>
-                  <img
-                    src={pb.files.getUrl(photo, photo.image)}
-                    alt={photo.title}
-                    className="w-full h-32 object-cover rounded-lg mb-2"
-                  />
-                  <p className="text-sm text-gray-300">{photo.title} - {new Date(photo.date).toLocaleDateString()}</p>
-                </div>
-              ))
-            ) : (
-              <>
-                <div>
-                  <img
-                    src="https://images.unsplash.com/photo-1435224668334-0f82ec57b605"
-                    alt="La Lune"
-                    className="w-full h-32 object-cover rounded-lg mb-2"
-                  />
-                  <p className="text-sm text-gray-300">Phase lunaire - 15 Mars 2024</p>
-                </div>
-                <div>
-                  <img
-                    src="https://images.unsplash.com/photo-1516339901601-2e1b62dc0c45"
-                    alt="Les Pléiades"
-                    className="w-full h-32 object-cover rounded-lg mb-2"
-                  />
-                  <p className="text-sm text-gray-300">Les Pléiades - 12 Mars 2024</p>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <button 
-          onClick={() => onPageChange('galaxy')}
-          className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-lg transition-transform hover:scale-105"
-        >
-          <Star className="w-8 h-8 mb-4 text-yellow-300" />
-          <h2 className="text-2xl font-semibold mb-3">Galaxies</h2>
-          <p className="text-gray-300">Collection de photographies de galaxies lointaines et leurs structures spectaculaires.</p>
-        </button>
-
-        <button 
-          onClick={() => onPageChange('solar_system')}
-          className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-lg transition-transform hover:scale-105"
-        >
-          <Moon className="w-8 h-8 mb-4 text-gray-300" />
-          <h2 className="text-2xl font-semibold mb-3">Système Solaire</h2>
-          <p className="text-gray-300">Observations détaillées des planètes, de la Lune et du Soleil.</p>
-        </button>
-
-        <button 
-          onClick={() => onPageChange('nebula')}
-          className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-lg transition-transform hover:scale-105"
-        >
-          <Sun className="w-8 h-8 mb-4 text-orange-400" />
-          <h2 className="text-2xl font-semibold mb-3">Nébuleuses</h2>
-          <p className="text-gray-300">Captures des plus belles nébuleuses et leurs couleurs étonnantes.</p>
-        </button>
-      </div>
-
-      <footer className="mt-16 text-center text-gray-400">
-        <p>© 2024 Cosmos Observer - Tous droits réservés</p>
-      </footer>
-    </div>
-  );
-}
-
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState('home');
+
   return (
     <div className="min-h-screen bg-black text-white relative">
       <StarField />
@@ -271,8 +131,9 @@ function App() {
       
       {currentPage === 'home' && <HomePage onPageChange={setCurrentPage} />}
       {currentPage === 'contact' && <ContactPage />}
+      {currentPage === 'nightcam' && <SkyCam />}
+      {currentPage === 'moon' && <MoonPage />}
 
-      {/* Intégration du Toaster Sonner */}
       <Toaster position="top-center" richColors theme="dark" />
     </div>
   );
