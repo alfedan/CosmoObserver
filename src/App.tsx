@@ -3,6 +3,7 @@ import { Camera, Star, Sun, Moon, Menu, X, Salad as Galaxy, Telescope, Contact, 
 import { pb, type PhotoRecord } from './lib/pocketbase';
 import { Contact as ContactPage } from './pages/Contact';
 import { StarField } from './components/StarField';
+import { Toaster } from 'sonner';
 
 function NavigationMenu({ isOpen, onClose, currentPage, onPageChange }: { 
   isOpen: boolean; 
@@ -250,7 +251,6 @@ function HomePage({ onPageChange }: { onPageChange: (page: string) => void }) {
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState('home');
-
   return (
     <div className="min-h-screen bg-black text-white relative">
       <StarField />
@@ -271,6 +271,9 @@ function App() {
       
       {currentPage === 'home' && <HomePage onPageChange={setCurrentPage} />}
       {currentPage === 'contact' && <ContactPage />}
+
+      {/* Intégration du Toaster Sonner */}
+      <Toaster position="top-center" richColors theme="dark" />
     </div>
   );
 }
