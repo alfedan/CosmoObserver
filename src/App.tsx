@@ -7,6 +7,7 @@ import { StarField } from './components/StarField';
 import { Toaster } from 'sonner';
 import { HomePage } from './pages/Home';
 import { Moon as MoonPage } from './pages/Moon';
+import { Admin } from './pages/Admin';
 
 function NavigationMenu({ isOpen, onClose, currentPage, onPageChange }: { 
   isOpen: boolean; 
@@ -133,6 +134,7 @@ function App() {
       {currentPage === 'contact' && <ContactPage />}
       {currentPage === 'nightcam' && <SkyCam />}
       {currentPage === 'moon' && <MoonPage />}
+      {currentPage === 'admin' && <Admin />}
 
       <Toaster position="top-center" richColors theme="dark" />
     </div>
@@ -140,3 +142,5 @@ function App() {
 }
 
 export default App;
+
+export default App
