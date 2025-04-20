@@ -9,16 +9,16 @@ export function HomePage({ onPageChange }: { onPageChange: (page: string) => voi
   useEffect(() => {
     async function fetchPhotos() {
       try {
-        const latestPhoto = await pb.collection('photos').getList(1, 1, {
-          sort: '-created'
+        const latestPhoto = await pb.collection('photos_astro').getList(1, 1, {
+          sort: '-date'
         });
         
         if (latestPhoto.items.length > 0) {
           setPhotoOfTheDay(latestPhoto.items[0] as PhotoRecord);
         }
 
-        const recent = await pb.collection('photos').getList(1, 2, {
-          sort: '-created',
+        const recent = await pb.collection('photos_astro').getList(1, 2, {
+          sort: '-date',
           filter: `id != '${latestPhoto.items[0].id}'`
         });
         
@@ -53,18 +53,22 @@ export function HomePage({ onPageChange }: { onPageChange: (page: string) => voi
               <>
                 <img
                   src={pb.files.getUrl(photoOfTheDay, photoOfTheDay.image)}
-                  alt={photoOfTheDay.title}
+                  alt={photoOfTheDay.titre}
                   className="w-full h-[400px] object-cover rounded-lg mb-4"
                 />
-                <p className="text-lg text-gray-300">{photoOfTheDay.title}</p>
+                <p className="text-lg text-gray-300">{photoOfTheDay.titre}</p>
                 <p className="text-sm text-gray-400">{photoOfTheDay.description}</p>
+                {photoOfTheDay.instrument && (
+                  <p className="text-sm text-gray-400 mt-2">Instrument : {photoOfTheDay.instrument}</p>
+                )}
+                {photoOfTheDay.camera && (
+                  <p className="text-sm text-gray-400">Appareil : {photoOfTheDay.camera}</p>
+                )}
               </>
             ) : (
-              <img
-                src="https://images.unsplash.com/photo-1419242902214-272b3f66ee7a"
-                alt="Photo astronomique du jour"
-                className="w-full h-[400px] object-cover rounded-lg mb-4"
-              />
+              <div className="w-full h-[400px] bg-gray-800 rounded-lg flex items-center justify-center">
+                <p className="text-gray-400">Aucune photo disponible</p>
+              </div>
             )}
           </div>
         </div>
@@ -75,37 +79,24 @@ export function HomePage({ onPageChange }: { onPageChange: (page: string) => voi
             Dernières Captures
           </h2>
           <div className="space-y-4">
-            {recentPhotos.length > 0 ? (
-              recentPhotos.map((photo) => (
-                <div key={photo.id}>
-                  <img
-                    src={pb.files.getUrl(photo, photo.image)}
-                    alt={photo.title}
-                    className="w-full h-32 object-cover rounded-lg mb-2"
-                  />
-                  <p className="text-sm text-gray-300">{photo.title} - {new Date(photo.date).toLocaleDateString()}</p>
-                </div>
-              ))
-            ) : (
-              <>
-                <div>
-                  <img
-                    src="https://images.unsplash.com/photo-1435224668334-0f82ec57b605"
-                    alt="La Lune"
-                    className="w-full h-32 object-cover rounded-lg mb-2"
-                  />
-                  <p className="text-sm text-gray-300">Phase lunaire - 15 Mars 2024</p>
-                </div>
-                <div>
-                  <img
-                    src="https://images.unsplash.com/photo-1516339901601-2e1b62dc0c45"
-                    alt="Les Pléiades"
-                    className="w-full h-32 object-cover rounded-lg mb-2"
-                  />
-                  <p className="text-sm text-gray-300">Les Pléiades - 12 Mars 2024</p>
-                </div>
-              </>
-            )}
+            {recentPhotos.map((photo) => (
+              <div key={photo.id}>
+                <img
+                  src={pb.files.getUrl(photo, photo.image)}
+                  alt={photo.titre}
+                  className="w-full h-32 object-cover rounded-lg mb-2"
+                />
+                <p className="text-sm text-gray-300">{photo.titre}</p>
+                <p className="text-xs text-gray-400">
+                  {new Date(photo.date).toLocaleDateString('fr-FR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </p>
+                <p className="text-xs text-gray-400">Type : {photo.objet}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>

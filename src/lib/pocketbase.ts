@@ -7,13 +7,13 @@ export interface PhotoRecord {
   id: string;
   created: string;
   updated: string;
-  title: string;
+  titre: string;
   description: string;
-  category: 'galaxy' | 'nebula' | 'cluster' | 'messier' | 'ic' | 'ngc' | 'sh2' | 'solar_system' | 'moon' | 'stars' | 'comet' | 'nightcam';
+  objet: 'galaxy' | 'nebula' | 'cluster' | 'messier' | 'ic' | 'ngc' | 'sh2' | 'solar_system' | 'moon' | 'stars' | 'comet' | 'nightcam';
   image: string;
   date: string;
-  equipment?: string;
-  settings?: string;
+  instrument?: string;
+  camera?: string;
 }
 
 export interface UserRecord {

@@ -15,8 +15,8 @@ export function SkyCam() {
   useEffect(() => {
     const fetchPhotos = async () => {
       try {
-        const resultList = await pb.collection('photos').getList(currentPage, IMAGES_PER_PAGE, {
-          filter: 'category = "nightcam"',
+        const resultList = await pb.collection('photos_astro').getList(currentPage, IMAGES_PER_PAGE, {
+          filter: 'objet = "nightcam"',
           sort: '-date',
         });
         
@@ -62,7 +62,6 @@ export function SkyCam() {
           <p className="text-xl text-gray-300">Surveillance du ciel en temps réel</p>
         </header>
 
-        {/* Section Caméra en Direct */}
         <div className="mb-16 bg-gray-900/50 backdrop-blur-sm rounded-lg overflow-hidden">
           <div className="p-4 border-b border-gray-700 flex justify-between items-center">
             <h2 className="text-2xl font-semibold">Caméra en Direct</h2>
@@ -85,7 +84,6 @@ export function SkyCam() {
           </div>
         </div>
 
-        {/* Section Archive Photos */}
         <div className="mt-16">
           <h2 className="text-2xl font-semibold mb-8 text-center">Archives Photos</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -97,13 +95,13 @@ export function SkyCam() {
                 <div className="aspect-square">
                   <img
                     src={pb.files.getUrl(photo, photo.image)}
-                    alt={photo.title}
+                    alt={photo.titre}
                     className="w-full h-full object-cover"
                     loading="lazy"
                   />
                 </div>
                 <div className="p-4">
-                  <h3 className="font-semibold text-lg mb-1">{photo.title}</h3>
+                  <h3 className="font-semibold text-lg mb-1">{photo.titre}</h3>
                   <p className="text-sm text-gray-400">
                     {new Date(photo.date).toLocaleDateString('fr-FR', {
                       year: 'numeric',
@@ -111,6 +109,12 @@ export function SkyCam() {
                       day: 'numeric',
                     })}
                   </p>
+                  {photo.instrument && (
+                    <p className="text-xs text-gray-400">Instrument : {photo.instrument}</p>
+                  )}
+                  {photo.camera && (
+                    <p className="text-xs text-gray-400">Appareil : {photo.camera}</p>
+                  )}
                 </div>
               </div>
             ))}

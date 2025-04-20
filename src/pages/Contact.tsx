@@ -42,7 +42,7 @@ export function Contact() {
         email: formData.email,
         subject: formData.subject,
         message: formData.message,
-        to: 'alfedan@free.fr',
+        to: 'cosmos@observer.star',
       });
 
       toast.success('✅ Votre message a été envoyé avec succès !');
