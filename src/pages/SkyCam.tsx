@@ -16,7 +16,7 @@ export function SkyCam() {
     const fetchPhotos = async () => {
       try {
         const resultList = await pb.collection('photos_astro').getList(currentPage, IMAGES_PER_PAGE, {
-          filter: 'objet = "nightcam"',
+          filter: 'objet = "SkyCam"',
           sort: '-date',
         });
         

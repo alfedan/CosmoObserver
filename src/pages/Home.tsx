@@ -131,7 +131,7 @@ export function HomePage({ onPageChange }: { onPageChange: (page: string) => voi
       </div>
 
       <footer className="mt-16 text-center text-gray-400">
-        <p>© 2024 Cosmos Observer - Tous droits réservés</p>
+        <p>© 2025 Cosmos Observer by Alfedan - Tous droits réservés</p>
       </footer>
     </div>
   );
