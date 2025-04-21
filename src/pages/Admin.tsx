@@ -5,6 +5,7 @@ import { StarField } from '../components/StarField';
 import { adminCredentials } from '../config/auth';
 import { AdminMessages } from '../components/AdminMessages';
 import { AdminJournal } from '../components/AdminJournal';
+import { AdminUploadPhotos } from '../components/AdminUploadPhotos';
 import { pb } from '../lib/pocketbase';
 
 export function Admin() {
@@ -225,6 +226,10 @@ export function Admin() {
 
     if (selectedMenu === 'journal') {
       return <AdminJournal onBack={() => setSelectedMenu(null)} />;
+    }
+
+    if (selectedMenu === 'upload-photos') {
+      return <AdminUploadPhotos onBack={() => setSelectedMenu(null)} />;
     }
 
     return (
