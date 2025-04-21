@@ -42,7 +42,7 @@ export function Other() {
       <div className="container mx-auto px-4 py-12">
         <header className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4 flex items-center justify-center gap-3">
-            <Camera className="w-10 h-10 text-gray-300" />
+            <Camera className="w-10 h-10 text-blue-300" />
             Autre Photos
           </h1>
           <p className="text-xl text-gray-300">Photo général du ciel nocturne</p>

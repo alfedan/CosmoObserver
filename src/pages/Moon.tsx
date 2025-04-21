@@ -12,7 +12,7 @@ export function Moon() {
     const fetchPhotos = async () => {
       try {
         const resultList = await pb.collection('photos_astro').getList(1, 100, {
-          filter: 'objet = "Lune"',
+          filter: 'objet ~ "Lune"',
           sort: '-date',
         });
         

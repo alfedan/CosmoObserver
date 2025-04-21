@@ -12,7 +12,7 @@ export function Comete() {
     const fetchPhotos = async () => {
       try {
         const resultList = await pb.collection('photos_astro').getList(1, 100, {
-          filter: 'objet = "Comète"',
+          filter: 'objet ~ "Comète"',
           sort: '-date',
         });
         

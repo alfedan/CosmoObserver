@@ -42,7 +42,7 @@ export function Stars() {
       <div className="container mx-auto px-4 py-12">
         <header className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4 flex items-center justify-center gap-3">
-            <Star className="w-10 h-10 text-gray-300" />
+            <Star className="w-10 h-10 text-yellow-300" />
             Photos des Etoiles
           </h1>
           <p className="text-xl text-gray-300">Photo des étoiles composant notre ciel nocturne</p>

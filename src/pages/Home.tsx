@@ -106,7 +106,7 @@ export function HomePage({ onPageChange }: { onPageChange: (page: string) => voi
           onClick={() => onPageChange('galaxy')}
           className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-lg transition-transform hover:scale-105"
         >
-          <Star className="w-8 h-8 mb-4 text-yellow-300" />
+          <Star className="w-8 h-8 mb-4 text-yellow-300 mx-auto" />
           <h2 className="text-2xl font-semibold mb-3">Galaxies</h2>
           <p className="text-gray-300">Collection de photographies de galaxies lointaines et leurs structures spectaculaires.</p>
         </button>
@@ -115,7 +115,7 @@ export function HomePage({ onPageChange }: { onPageChange: (page: string) => voi
           onClick={() => onPageChange('solar_system')}
           className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-lg transition-transform hover:scale-105"
         >
-          <Moon className="w-8 h-8 mb-4 text-gray-300" />
+          <Moon className="w-8 h-8 mb-4 text-gray-300 mx-auto" />
           <h2 className="text-2xl font-semibold mb-3">Système Solaire</h2>
           <p className="text-gray-300">Observations détaillées des planètes, de la Lune et du Soleil.</p>
         </button>
@@ -124,7 +124,7 @@ export function HomePage({ onPageChange }: { onPageChange: (page: string) => voi
           onClick={() => onPageChange('nebula')}
           className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-lg transition-transform hover:scale-105"
         >
-          <Sun className="w-8 h-8 mb-4 text-orange-400" />
+          <Sun className="w-8 h-8 mb-4 text-orange-400 mx-auto" />
           <h2 className="text-2xl font-semibold mb-3">Nébuleuses</h2>
           <p className="text-gray-300">Captures des plus belles nébuleuses et leurs couleurs étonnantes.</p>
         </button>
