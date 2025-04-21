@@ -98,17 +98,17 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
   };
 
   const objetOptions = [
-    { value: 'galaxy', label: 'Galaxie' },
-    { value: 'nebula', label: 'Nébuleuse' },
-    { value: 'solar_system', label: 'Planète' },
-    { value: 'cluster', label: 'Amas' },
-    { value: 'moon', label: 'Lune' },
-    { value: 'sun', label: 'Soleil' },
-    { value: 'stars', label: 'Étoile' },
-    { value: 'comet', label: 'Comète' },
-    { value: 'asteroid', label: 'Astéroïde' },
-    { value: 'nightcam', label: 'SkyCam' },
-    { value: 'other', label: 'Autre' }
+    { value: 'Galaxie', label: 'Galaxie' },
+    { value: 'Nébuleuse', label: 'Nébuleuse' },
+    { value: 'Planète', label: 'Planète' },
+    { value: 'Amas', label: 'Amas' },
+    { value: 'Lune', label: 'Lune' },
+    { value: 'Soleil', label: 'Soleil' },
+    { value: 'Etoile', label: 'Étoile' },
+    { value: 'Comète', label: 'Comète' },
+    { value: 'Asteroïde', label: 'Astéroïde' },
+    { value: 'SkyCam', label: 'SkyCam' },
+    { value: 'Autre', label: 'Autre' }
   ];
 
   return (

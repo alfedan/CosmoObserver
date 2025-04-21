@@ -9,7 +9,7 @@ export interface PhotoRecord {
   updated: string;
   titre: string;
   description: string;
-  objet: 'galaxy' | 'nebula' | 'cluster' | 'messier' | 'ic' | 'ngc' | 'sh2' | 'solar_system' | 'moon' | 'stars' | 'comet' | 'nightcam';
+  objet: 'Galaxie' | 'Nébuleuse' | 'Planète' | 'Amas' | 'Soleil' | 'Lune' | 'Etoile' | 'Comète' | 'Astéroïde' | 'Autre' | 'SkyCam';
   image: string;
   date: string;
   instrument?: string;
