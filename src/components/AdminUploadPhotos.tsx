@@ -107,7 +107,11 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
     { value: 'Etoile', label: 'Étoile' },
     { value: 'Comète', label: 'Comète' },
     { value: 'SkyCam', label: 'SkyCam' },
-    { value: 'Autre', label: 'Autre' }
+    { value: 'Autre', label: 'Autre' },
+    { value: 'NGC', label: 'NGC' },
+    { value: 'IC', label: 'IC' },
+    { value: 'SH2', label: 'SH2' },
+    { value: 'M', label: 'M' }
   ];
 
   return (

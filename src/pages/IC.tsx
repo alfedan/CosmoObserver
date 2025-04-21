@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Moon as MoonIcon, X } from 'lucide-react';
+import { Telescope as Telescope, X } from 'lucide-react';
 import { pb, type PhotoRecord } from '../lib/pocketbase';
 import { StarField } from '../components/StarField';
 
-export function Moon() {
+export function IC() {
   const [photos, setPhotos] = useState<PhotoRecord[]>([]);
   const [selectedPhoto, setSelectedPhoto] = useState<PhotoRecord | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -12,7 +12,7 @@ export function Moon() {
     const fetchPhotos = async () => {
       try {
         const resultList = await pb.collection('photos_astro').getList(1, 100, {
-          filter: 'objet ~ "Lune"',
+          filter: 'objet ~ "IC"',
           sort: '-date',
         });
         
@@ -42,10 +42,11 @@ export function Moon() {
       <div className="container mx-auto px-4 py-12">
         <header className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4 flex items-center justify-center gap-3">
-            <MoonIcon className="w-10 h-10 text-gray-300" />
-            Photos de la Lune
+            <Telescope className="w-10 h-10 text-orange-300" />
+            Photos astronomique IC
           </h1>
-          <p className="text-xl text-gray-300">Exploration de notre satellite naturel</p>
+          <p className="text-xl text-gray-300">Index Catalogue (IC)</p>
+          <p className="text-xl text-gray-200">C'est un catalogue de galaxies, de nébuleuses et               d'amas d'étoiles qui sert de supplément au New General Catalogue (NGC). Il a été                   enrichi jusqu'à contenir plus de 5 000 objets. Le catalogue fut compilé par John Dreyer            et récapitule les découvertes de galaxies, d'amas et de nébuleuses entre 1888 et                   1907</p>
         </header>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -105,6 +106,7 @@ export function Moon() {
                   : selectedPhoto.objet}
                 </p>
                 )}
+
                 {selectedPhoto.instrument && (
                   <p className="text-sm text-gray-400 mt-2">
                     Équipement : {selectedPhoto.instrument}

@@ -11,6 +11,9 @@ import { Admin } from './pages/Admin';
 import { Other } from './pages/Other';
 import { Comete } from './pages/Comete';
 import { Stars } from './pages/Stars';
+import { SH2 } from './pages/SH2';
+import { NGC } from './pages/NGC';
+import { IC } from './pages/IC';
 
 function NavigationMenu({ isOpen, onClose, currentPage, onPageChange }: { 
   isOpen: boolean; 
@@ -36,9 +39,9 @@ function NavigationMenu({ isOpen, onClose, currentPage, onPageChange }: {
     { name: 'Système Solaire', icon: Sun, category: 'solar_system' },
     { name: 'Etoiles', icon: Star, category: 'stars' },
     { name: 'Amas', icon: Star, category: 'cluster' },
-    { name: 'IC', icon: Telescope, category: 'ic' },
-    { name: 'NGC', icon: Telescope, category: 'ngc' },
-    { name: 'SH2', icon: Telescope, category: 'sh2' },
+    { name: 'IC', icon: Telescope, category: 'IC' },
+    { name: 'NGC', icon: Telescope, category: 'NGC' },
+    { name: 'SH2', icon: Telescope, category: 'SH2' },
     { name: 'Comètes', icon: Star, category: 'comete' },
     { name: 'Autres Photo', icon: Camera, category: 'other' }
   ];
@@ -141,6 +144,9 @@ function App() {
       {currentPage === 'other' && <Other />}
       {currentPage === 'comete' && <Comete />}
       {currentPage === 'stars' && <Stars />}
+      {currentPage === 'SH2' && <SH2 />}
+      {currentPage === 'NGC' && <NGC />}
+      {currentPage === 'IC' && <IC />}
 
       <Toaster position="top-center" richColors theme="dark" />
     </div>

@@ -94,7 +94,11 @@ export function HomePage({ onPageChange }: { onPageChange: (page: string) => voi
                     day: 'numeric'
                   })}
                 </p>
-                <p className="text-xs text-gray-400">Type : {photo.objet}</p>
+                {photo.objet && (
+                <p className="text-xs text-gray-400 mt-1">
+                Objets : {Array.isArray(photo.objet) ? photo.objet.join(', ') : photo.objet}
+                </p>
+                )}
               </div>
             ))}
           </div>
