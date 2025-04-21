@@ -25,3 +25,11 @@ export interface UserRecord {
   name: string;
   avatar?: string;
 }
+
+export interface AdminLogRecord {
+  id: string;
+  created: string;
+  action: string;
+  status: boolean;
+  details?: string;
+}
