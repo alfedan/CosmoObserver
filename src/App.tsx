@@ -8,6 +8,9 @@ import { Toaster } from 'sonner';
 import { HomePage } from './pages/Home';
 import { Moon as MoonPage } from './pages/Moon';
 import { Admin } from './pages/Admin';
+import { Other } from './pages/Other';
+import { Comete } from './pages/Comete';
+import { Stars } from './pages/Stars';
 
 function NavigationMenu({ isOpen, onClose, currentPage, onPageChange }: { 
   isOpen: boolean; 
@@ -36,7 +39,7 @@ function NavigationMenu({ isOpen, onClose, currentPage, onPageChange }: {
     { name: 'IC', icon: Telescope, category: 'ic' },
     { name: 'NGC', icon: Telescope, category: 'ngc' },
     { name: 'SH2', icon: Telescope, category: 'sh2' },
-    { name: 'Comètes', icon: Star, category: 'comet' },
+    { name: 'Comètes', icon: Star, category: 'comete' },
     { name: 'Autres Photo', icon: Camera, category: 'other' }
   ];
 
@@ -135,6 +138,9 @@ function App() {
       {currentPage === 'nightcam' && <SkyCam />}
       {currentPage === 'moon' && <MoonPage />}
       {currentPage === 'admin' && <Admin />}
+      {currentPage === 'other' && <Other />}
+      {currentPage === 'comete' && <Comete />}
+      {currentPage === 'stars' && <Stars />}
 
       <Toaster position="top-center" richColors theme="dark" />
     </div>
