@@ -1,30 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { Salad as GalaxyIcon, X } from 'lucide-react';
+import { Salad as GalaxyIcon, X, Play } from 'lucide-react';
 import { pb, type PhotoRecord } from '../lib/pocketbase';
 import { StarField } from '../components/StarField';
 
 export function Galaxy() {
-  const [photos, setPhotos] = useState<PhotoRecord[]>([]);
-  const [selectedPhoto, setSelectedPhoto] = useState<PhotoRecord | null>(null);
+  const [medias, setMedias] = useState<PhotoRecord[]>([]);
+  const [selectedMedia, setSelectedMedia] = useState<PhotoRecord | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchPhotos = async () => {
+    const fetchMedias = async () => {
       try {
         const resultList = await pb.collection('photos_astro').getList(1, 100, {
           filter: 'objet ~ "Galaxie"',
           sort: '-date',
         });
         
-        setPhotos(resultList.items as PhotoRecord[]);
+        setMedias(resultList.items as PhotoRecord[]);
       } catch (error) {
-        console.error('Erreur lors de la récupération des photos:', error);
+        console.error('Erreur lors de la récupération des médias:', error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchPhotos();
+    fetchMedias();
   }, []);
 
   if (isLoading) {
@@ -43,34 +43,49 @@ export function Galaxy() {
         <header className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4 flex items-center justify-center gap-3">
             <GalaxyIcon className="w-10 h-10 text-yellow-300" />
-            Photos de Galaxies
+            Galaxies
           </h1>
-          <p className="text-xl text-gray-300">Photo des des plus belles Galaxies de notre ciel noturne</p>
+          <p className="text-xl text-gray-300">Photos et vidéos des plus belles Galaxies de notre ciel nocturne</p>
           <p className="text-xl text-gray-200">Une galaxie est une structure cosmique formée d'étoiles, de leurs planètes éventuelles, de gaz, de poussière interstellaire, sans doute essentiellement de matière noire, le tout rassemblé par l'effet de gravitation de l'ensemble de ces composantes.</p>
         </header>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {photos.map((photo) => (
+          {medias.map((media) => (
             <button
-              key={photo.id}
-              onClick={() => setSelectedPhoto(photo)}
+              key={media.id}
+              onClick={() => setSelectedMedia(media)}
               className="group bg-gray-900/50 backdrop-blur-sm rounded-lg overflow-hidden transform hover:scale-105 transition-all duration-300"
             >
               <div className="aspect-square relative">
-                <img
-                  src={pb.files.getUrl(photo, photo.image)}
-                  alt={photo.titre}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
+                {media.mediaType === 'image' ? (
+                  <img
+                    src={pb.files.getUrl(media, media.image || '')}
+                    alt={media.titre}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div className="relative w-full h-full bg-gray-800">
+                    <video
+                      src={pb.files.getUrl(media, media.video || '')}
+                      className="w-full h-full object-cover"
+                      poster={pb.files.getUrl(media, 'thumbnail')}
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <Play className="w-12 h-12 text-white opacity-70" />
+                    </div>
+                  </div>
+                )}
                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <span className="text-white text-sm">Cliquez pour agrandir</span>
+                  <span className="text-white text-sm">
+                    {media.mediaType === 'image' ? 'Voir l\'image' : 'Voir la vidéo'}
+                  </span>
                 </div>
               </div>
               <div className="p-4">
-                <h3 className="font-semibold text-lg mb-1">{photo.titre}</h3>
+                <h3 className="font-semibold text-lg mb-1">{media.titre}</h3>
                 <p className="text-sm text-gray-400">
-                  {new Date(photo.date).toLocaleDateString('fr-FR', {
+                  {new Date(media.date).toLocaleDateString('fr-FR', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric',
@@ -81,43 +96,52 @@ export function Galaxy() {
           ))}
         </div>
 
-        {selectedPhoto && (
+        {selectedMedia && (
           <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center">
             <button
-              onClick={() => setSelectedPhoto(null)}
+              onClick={() => setSelectedMedia(null)}
               className="absolute top-4 right-4 p-2 bg-gray-800 rounded-full hover:bg-gray-700 transition-colors"
             >
               <X className="w-6 h-6" />
             </button>
 
             <div className="w-full h-full p-4 md:p-8 flex flex-col items-center justify-center">
-              <img
-                src={pb.files.getUrl(selectedPhoto, selectedPhoto.image)}
-                alt={selectedPhoto.titre}
-                className="max-w-full max-h-[80vh] object-contain rounded-lg"
-              />
+              {selectedMedia.mediaType === 'image' ? (
+                <img
+                  src={pb.files.getUrl(selectedMedia, selectedMedia.image || '')}
+                  alt={selectedMedia.titre}
+                  className="max-w-full max-h-[80vh] object-contain rounded-lg"
+                />
+              ) : (
+                <video
+                  src={pb.files.getUrl(selectedMedia, selectedMedia.video || '')}
+                  controls
+                  autoPlay
+                  className="max-w-full max-h-[80vh] rounded-lg"
+                />
+              )}
               <div className="mt-4 text-center">
-                <h2 className="text-2xl font-bold mb-2">{selectedPhoto.titre}</h2>
-                <p className="text-gray-300">{selectedPhoto.description}</p>
-                {selectedPhoto.objet && selectedPhoto.objet.length > 0 && (
+                <h2 className="text-2xl font-bold mb-2">{selectedMedia.titre}</h2>
+                <p className="text-gray-300">{selectedMedia.description}</p>
+                {selectedMedia.objet && selectedMedia.objet.length > 0 && (
                   <p className="text-sm text-gray-400 mt-2">
-                  Objets : {Array.isArray(selectedPhoto.objet)
-                  ? selectedPhoto.objet.join(', ')
-                  : selectedPhoto.objet}
-                </p>
-                )}
-                {selectedPhoto.instrument && (
-                  <p className="text-sm text-gray-400 mt-2">
-                    Équipement : {selectedPhoto.instrument}
+                    Objets : {Array.isArray(selectedMedia.objet)
+                      ? selectedMedia.objet.join(', ')
+                      : selectedMedia.objet}
                   </p>
                 )}
-                {selectedPhoto.camera && (
+                {selectedMedia.instrument && (
+                  <p className="text-sm text-gray-400 mt-2">
+                    Équipement : {selectedMedia.instrument}
+                  </p>
+                )}
+                {selectedMedia.camera && (
                   <p className="text-sm text-gray-400">
-                    Appareil : {selectedPhoto.camera}
+                    Appareil : {selectedMedia.camera}
                   </p>
                 )}
                 <p className="text-sm text-gray-400 mt-2">
-                  Date : {new Date(selectedPhoto.date).toLocaleDateString('fr-FR', {
+                  Date : {new Date(selectedMedia.date).toLocaleDateString('fr-FR', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric',

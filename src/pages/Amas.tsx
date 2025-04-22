@@ -12,7 +12,7 @@ export function Amas() {
     const fetchPhotos = async () => {
       try {
         const resultList = await pb.collection('photos_astro').getList(1, 100, {
-          filter: 'objet ~ "SH2"',
+          filter: 'objet ~ "Amas"',
           sort: '-date',
         });
         

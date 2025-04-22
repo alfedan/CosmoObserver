@@ -10,7 +10,9 @@ export interface PhotoRecord {
   titre: string;
   description: string;
   objet: 'Galaxie' | 'Nébuleuse' | 'Planète' | 'Amas' | 'Soleil' | 'Lune' | 'Etoile' | 'Comète' | 'Autre' | 'SkyCam';
-  image: string;
+  mediaType: 'image' | 'video';
+  image?: string;
+  video?: string;
   date: string;
   instrument?: string;
   camera?: string;

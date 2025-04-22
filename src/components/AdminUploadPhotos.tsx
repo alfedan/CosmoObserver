@@ -88,7 +88,7 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
       }
 
       // Utiliser une seule collection pour les deux types de médias
-      await pb.collection('medias_astro').create(formDataToSend);
+      await pb.collection('photos_astro').create(formDataToSend);
 
       toast.success(`✅ ${formData.mediaType === 'image' ? 'Photo' : 'Vidéo'} téléchargée avec succès !`);
       confetti({
