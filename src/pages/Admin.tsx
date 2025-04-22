@@ -6,6 +6,7 @@ import { adminCredentials } from '../config/auth';
 import { AdminMessages } from '../components/AdminMessages';
 import { AdminJournal } from '../components/AdminJournal';
 import { AdminUploadPhotos } from '../components/AdminUploadPhotos';
+import { AdminDeleteMessages } from '../components/AdminDeleteMessages';
 import { pb } from '../lib/pocketbase';
 
 export function Admin() {
@@ -230,6 +231,10 @@ export function Admin() {
 
     if (selectedMenu === 'upload-photos') {
       return <AdminUploadPhotos onBack={() => setSelectedMenu(null)} />;
+    }
+
+    if (selectedMenu === 'delete-messages') {
+      return <AdminDeleteMessages onBack={() => setSelectedMenu(null)} />;
     }
 
     return (

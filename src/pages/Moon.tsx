@@ -46,6 +46,7 @@ export function Moon() {
             Photos de la Lune
           </h1>
           <p className="text-xl text-gray-300">Exploration de notre satellite naturel</p>
+          <p className="text-xl text-gray-200">La Lune est un astre rocheux en orbite autour de la planète Terre. Elle a probablement été créée par la collision entre un très gros astéroïde (de la taille de Mars) et la Terre il y a 4,5 milliards d'années. Les débris de l'impact se sont agglomérés pour créer notre satellite naturel, la Lune.</p>
         </header>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

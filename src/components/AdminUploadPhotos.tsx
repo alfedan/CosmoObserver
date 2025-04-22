@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Upload, Calendar, Camera } from 'lucide-react';
+import { ArrowLeft, Upload, Calendar, Camera, Film } from 'lucide-react';
 import { pb } from '../lib/pocketbase';
 import { toast } from 'sonner';
 import confetti from 'canvas-confetti';
@@ -7,47 +7,64 @@ import confetti from 'canvas-confetti';
 interface FormData {
   titre: string;
   description: string;
-  objet: string;
+  objet: string[];
   date: string;
   instrument: string;
   camera: string;
-  image: File | null;
+  mediaType: 'image' | 'video';
+  mediaFile: File | null;
 }
 
 export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
   const [formData, setFormData] = useState<FormData>({
     titre: '',
     description: '',
-    objet: '',
+    objet: [],
     date: new Date().toISOString().split('T')[0],
     instrument: '',
     camera: '',
-    image: null
+    mediaType: 'image',
+    mediaFile: null
   });
 
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
+    if (name === 'objet') {
+      // Pour la sélection multiple, nous devons extraire tous les éléments sélectionnés
+      const selectedOptions = Array.from((e.target as HTMLSelectElement).selectedOptions, option => option.value);
       setFormData(prev => ({
         ...prev,
-        image: e.target.files![0]
+        [name]: selectedOptions
+      }));
+    } else if (name === 'mediaType') {
+      setFormData(prev => ({
+        ...prev,
+        mediaType: value as 'image' | 'video',
+        mediaFile: null // Réinitialiser le fichier lors du changement de type
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
       }));
     }
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setFormData(prev => ({
+      ...prev,
+      mediaFile: file
+    }));
+  };
+ 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.image) {
-      toast.error('❌ Veuillez sélectionner une image');
+    if (!formData.mediaFile) {
+      toast.error(`❌ Veuillez sélectionner un${formData.mediaType === 'image' ? 'e image' : 'e vidéo'}`);
       return;
     }
 
@@ -57,15 +74,23 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
       const formDataToSend = new FormData();
       formDataToSend.append('titre', formData.titre);
       formDataToSend.append('description', formData.description);
-      formDataToSend.append('objet', formData.objet);
+      formDataToSend.append('objet', JSON.stringify(formData.objet));
       formDataToSend.append('date', formData.date);
       formDataToSend.append('instrument', formData.instrument);
       formDataToSend.append('camera', formData.camera);
-      formDataToSend.append('image', formData.image);
+      formDataToSend.append('mediaType', formData.mediaType);
+      
+      // Utiliser le même nom de champ dans Pocketbase, mais en envoyant soit dans 'image' soit dans 'video'
+      if (formData.mediaType === 'image') {
+        formDataToSend.append('image', formData.mediaFile);
+      } else {
+        formDataToSend.append('video', formData.mediaFile);
+      }
 
-      await pb.collection('photos_astro').create(formDataToSend);
+      // Utiliser une seule collection pour les deux types de médias
+      await pb.collection('medias_astro').create(formDataToSend);
 
-      toast.success('✅ Photo téléchargée avec succès !');
+      toast.success(`✅ ${formData.mediaType === 'image' ? 'Photo' : 'Vidéo'} téléchargée avec succès !`);
       confetti({
         particleCount: 100,
         spread: 70,
@@ -76,22 +101,23 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
       setFormData({
         titre: '',
         description: '',
-        objet: '',
+        objet: [],
         date: new Date().toISOString().split('T')[0],
         instrument: '',
         camera: '',
-        image: null
+        mediaType: formData.mediaType, // Conserver le type de média actuel
+        mediaFile: null
       });
 
       // Réinitialiser l'input file
-      const fileInput = document.getElementById('image') as HTMLInputElement;
+      const fileInput = document.getElementById('mediaFile') as HTMLInputElement;
       if (fileInput) {
         fileInput.value = '';
       }
 
     } catch (error) {
       console.error('Erreur:', error);
-      toast.error('❌ Une erreur est survenue lors du téléchargement');
+      toast.error(`❌ Une erreur est survenue lors du téléchargement de ${formData.mediaType === 'image' ? 'l\'image' : 'la vidéo'}`);
     } finally {
       setIsLoading(false);
     }
@@ -123,7 +149,7 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
         >
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <h2 className="text-2xl font-semibold">Téléchargement de photo</h2>
+        <h2 className="text-2xl font-semibold">Téléchargement de média</h2>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -141,25 +167,29 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
           </div>
 
           <div>
-            <label className="block mb-1 font-medium">Type d'objet</label>
+            <label className="block mb-1 font-medium">Type d'objet (sélection multiple possible)</label>
             <select
               name="objet"
+              multiple
               value={formData.objet}
               onChange={handleChange}
               className="w-full px-4 py-2 rounded bg-gray-800 text-white border border-gray-700"
+              size={5}
               required
             >
-              <option value="">Sélectionner un type</option>
               {objetOptions.map(option => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
               ))}
             </select>
+            <p className="text-xs text-gray-400 mt-1">
+              Maintenez Ctrl (ou Cmd sur Mac) pour sélectionner plusieurs objets
+            </p>
           </div>
 
           <div>
-            <label className="block mb-1 font-medium">Date de la photo</label>
+            <label className="block mb-1 font-medium">Date de prise</label>
             <div className="relative">
               <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
@@ -174,22 +204,56 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
           </div>
 
           <div>
-            <label className="block mb-1 font-medium">Image</label>
+            <label className="block mb-1 font-medium">Type de média</label>
+            <div className="flex gap-4">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="mediaType"
+                  value="image"
+                  checked={formData.mediaType === 'image'}
+                  onChange={handleChange}
+                  className="text-blue-600"
+                />
+                <Camera className="w-5 h-5" />
+                <span>Image</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="mediaType"
+                  value="video"
+                  checked={formData.mediaType === 'video'}
+                  onChange={handleChange}
+                  className="text-blue-600"
+                />
+                <Film className="w-5 h-5" />
+                <span>Vidéo</span>
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label className="block mb-1 font-medium">Fichier</label>
             <div className="relative">
               <input
                 type="file"
-                id="image"
-                accept="image/*"
-                onChange={handleImageChange}
+                id="mediaFile"
+                accept={formData.mediaType === 'image' ? 'image/*' : 'video/*'}
+                onChange={handleFileChange}
                 className="hidden"
                 required
               />
               <label
-                htmlFor="image"
+                htmlFor="mediaFile"
                 className="flex items-center gap-2 px-4 py-2 rounded bg-gray-800 text-white border border-gray-700 cursor-pointer hover:bg-gray-700 transition-colors"
               >
-                <Camera className="w-5 h-5" />
-                {formData.image ? formData.image.name : 'Sélectionner une image'}
+                {formData.mediaType === 'image' ? (
+                  <Camera className="w-5 h-5" />
+                ) : (
+                  <Film className="w-5 h-5" />
+                )}
+                {formData.mediaFile ? formData.mediaFile.name : `Sélectionner un${formData.mediaType === 'image' ? 'e image' : 'e vidéo'}`}
               </label>
             </div>
           </div>
@@ -218,7 +282,7 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
           </div>
 
           <div>
-            <label className="block mb-1 font-medium">Appareil photo</label>
+            <label className="block mb-1 font-medium">Appareil photo/caméra</label>
             <input
               type="text"
               name="camera"
@@ -244,7 +308,7 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
           ) : (
             <>
               <Upload className="w-5 h-5" />
-              Télécharger la photo
+              Télécharger {formData.mediaType === 'image' ? 'l\'image' : 'la vidéo'}
             </>
           )}
         </button>

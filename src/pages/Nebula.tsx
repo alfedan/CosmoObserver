@@ -3,7 +3,7 @@ import { Star as Star, X } from 'lucide-react';
 import { pb, type PhotoRecord } from '../lib/pocketbase';
 import { StarField } from '../components/StarField';
 
-export function Comete() {
+export function Nebula() {
   const [photos, setPhotos] = useState<PhotoRecord[]>([]);
   const [selectedPhoto, setSelectedPhoto] = useState<PhotoRecord | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -12,7 +12,7 @@ export function Comete() {
     const fetchPhotos = async () => {
       try {
         const resultList = await pb.collection('photos_astro').getList(1, 100, {
-          filter: 'objet ~ "Comète"',
+          filter: 'objet ~ "Nébuleuse"',
           sort: '-date',
         });
         
@@ -42,11 +42,11 @@ export function Comete() {
       <div className="container mx-auto px-4 py-12">
         <header className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4 flex items-center justify-center gap-3">
-            <Star className="w-10 h-10 text-red-300" />
-            Photos de comètes et géocroiseurs
+            <Star className="w-10 h-10 text-green-300" />
+            Photos de Nébuleuses
           </h1>
-          <p className="text-xl text-gray-300">Photo de Comète et Géocroiseur souvent difficile a capturer</p>
-        <p className="text-xl text-gray-200">Un objet géocroiseur (ou NEO pour Near Earth Object) est un astéroïde ou une comète du système solaire que son orbite autour du Soleil amène à faible distance de l' orbite terrestre, et donc potentiellement à proximité de la Terre</p>
+          <p className="text-xl text-gray-300">Photo des des plus belles Nébuleuses de notre ciel noturne</p>
+          <p className="text-xl text-gray-200">Une nébuleuse est, en astronomie, un objet céleste composé de gaz raréfié, de plasma ou de poussières interstellaires. Lumineuse ou obscure, elle est généralement associée à des étoiles.</p>
         </header>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -106,7 +106,6 @@ export function Comete() {
                   : selectedPhoto.objet}
                 </p>
                 )}
-
                 {selectedPhoto.instrument && (
                   <p className="text-sm text-gray-400 mt-2">
                     Équipement : {selectedPhoto.instrument}

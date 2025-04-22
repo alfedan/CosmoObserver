@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Camera, Star, Sun, Moon, Menu, X, Salad as Galaxy, Telescope, Contact, User, ChevronRight, Home, ChevronDown } from 'lucide-react';
+import { Camera, Star, Sun, Moon, Menu, X, Salad as GalaxyIcon, Telescope, Contact, User, ChevronRight, Home, ChevronDown } from 'lucide-react';
 import { pb, type PhotoRecord } from './lib/pocketbase';
 import { Contact as ContactPage } from './pages/Contact';
 import { SkyCam } from './pages/SkyCam';
@@ -14,6 +14,9 @@ import { Stars } from './pages/Stars';
 import { SH2 } from './pages/SH2';
 import { NGC } from './pages/NGC';
 import { IC } from './pages/IC';
+import { Galaxy } from './pages/Galaxy';
+import { Nebula } from './pages/Nebula';
+import { Amas } from './pages/Amas';
 
 function NavigationMenu({ isOpen, onClose, currentPage, onPageChange }: { 
   isOpen: boolean; 
@@ -25,8 +28,8 @@ function NavigationMenu({ isOpen, onClose, currentPage, onPageChange }: {
 
   const mainMenuItems = [
     { name: 'Accueil', icon: Home, category: 'home' },
-    { name: 'Galaxies', icon: Galaxy, category: 'galaxy' },
-    { name: 'Nébuleuses', icon: Star, category: 'nebula' },
+    { name: 'Galaxies', icon: GalaxyIcon, category: 'Galaxy' },
+    { name: 'Nébuleuses', icon: Star, category: 'Nebula' },
     { name: 'Messier', icon: Telescope, category: 'messier' },
     { name: 'Lune', icon: Moon, category: 'moon' },
     { name: 'SkyCam', icon: Camera, category: 'nightcam' },
@@ -38,7 +41,7 @@ function NavigationMenu({ isOpen, onClose, currentPage, onPageChange }: {
   const othersSubmenu = [
     { name: 'Système Solaire', icon: Sun, category: 'solar_system' },
     { name: 'Etoiles', icon: Star, category: 'stars' },
-    { name: 'Amas', icon: Star, category: 'cluster' },
+    { name: 'Amas', icon: Star, category: 'amas' },
     { name: 'IC', icon: Telescope, category: 'IC' },
     { name: 'NGC', icon: Telescope, category: 'NGC' },
     { name: 'SH2', icon: Telescope, category: 'SH2' },
@@ -147,6 +150,9 @@ function App() {
       {currentPage === 'SH2' && <SH2 />}
       {currentPage === 'NGC' && <NGC />}
       {currentPage === 'IC' && <IC />}
+      {currentPage === 'Galaxy' && <Galaxy />}
+      {currentPage === 'Nebula' && <Nebula />}
+      {currentPage === 'amas' && <Amas />}
 
       <Toaster position="top-center" richColors theme="dark" />
     </div>

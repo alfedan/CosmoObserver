@@ -46,6 +46,7 @@ export function Stars() {
             Photos des Etoiles
           </h1>
           <p className="text-xl text-gray-300">Photo des étoiles composant notre ciel nocturne</p>
+          <p className="text-xl text-gray-200">Une étoile est un corps céleste plasmatique qui rayonne sa propre lumière par réactions de fusion nucléaire, ou des corps qui ont été dans cet état à un stade de leur cycle de vie, comme les naines blanches ou les étoiles à neutrons.</p>
         </header>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

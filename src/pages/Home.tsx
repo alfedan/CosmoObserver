@@ -134,9 +134,20 @@ export function HomePage({ onPageChange }: { onPageChange: (page: string) => voi
         </button>
       </div>
 
-      <footer className="mt-16 text-center text-gray-400">
-        <p>© 2025 Cosmos Observer by Alfedan - Tous droits réservés</p>
-      </footer>
+<footer className="mt-16 text-center text-gray-400">
+  <p>
+    © 2025 Cosmos Observer by{' '}
+    <a
+      href="https://github.com/alfedan/CosmoObserver"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-blue-400 hover:underline"
+    >
+      Alfedan
+    </a>{' '}
+    - Tous droits réservés
+  </p>
+</footer>
     </div>
   );
 }
