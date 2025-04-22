@@ -33,7 +33,6 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
     const { name, value } = e.target;
 
     if (name === 'objet') {
-      // Pour la sélection multiple, nous devons extraire tous les éléments sélectionnés
       const selectedOptions = Array.from((e.target as HTMLSelectElement).selectedOptions, option => option.value);
       setFormData(prev => ({
         ...prev,
@@ -43,7 +42,7 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
       setFormData(prev => ({
         ...prev,
         mediaType: value as 'image' | 'video',
-        mediaFile: null // Réinitialiser le fichier lors du changement de type
+        mediaFile: null
       }));
     } else {
       setFormData(prev => ({
@@ -80,15 +79,20 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
       formDataToSend.append('camera', formData.camera);
       formDataToSend.append('mediaType', formData.mediaType);
       
-      // Utiliser le même nom de champ dans Pocketbase, mais en envoyant soit dans 'image' soit dans 'video'
       if (formData.mediaType === 'image') {
         formDataToSend.append('image', formData.mediaFile);
       } else {
         formDataToSend.append('video', formData.mediaFile);
       }
 
-      // Utiliser une seule collection pour les deux types de médias
       await pb.collection('photos_astro').create(formDataToSend);
+
+      // Log the successful upload
+      await pb.collection('admin_logs').create({
+        action: 'Téléchargement média',
+        status: true,
+        details: `${formData.mediaType === 'image' ? 'Photo' : 'Vidéo'} "${formData.titre}" téléchargée`
+      });
 
       toast.success(`✅ ${formData.mediaType === 'image' ? 'Photo' : 'Vidéo'} téléchargée avec succès !`);
       confetti({
@@ -97,7 +101,6 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
         origin: { y: 0.6 }
       });
 
-      // Réinitialiser le formulaire
       setFormData({
         titre: '',
         description: '',
@@ -105,11 +108,10 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
         date: new Date().toISOString().split('T')[0],
         instrument: '',
         camera: '',
-        mediaType: formData.mediaType, // Conserver le type de média actuel
+        mediaType: formData.mediaType,
         mediaFile: null
       });
 
-      // Réinitialiser l'input file
       const fileInput = document.getElementById('mediaFile') as HTMLInputElement;
       if (fileInput) {
         fileInput.value = '';
@@ -118,6 +120,13 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
     } catch (error) {
       console.error('Erreur:', error);
       toast.error(`❌ Une erreur est survenue lors du téléchargement de ${formData.mediaType === 'image' ? 'l\'image' : 'la vidéo'}`);
+      
+      // Log the failed upload
+      await pb.collection('admin_logs').create({
+        action: 'Téléchargement média',
+        status: false,
+        details: `Erreur lors du téléchargement de ${formData.mediaType === 'image' ? 'la photo' : 'la vidéo'} "${formData.titre}"`
+      });
     } finally {
       setIsLoading(false);
     }
