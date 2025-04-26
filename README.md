@@ -1,5 +1,8 @@
 # CosmosObserver
 interface pour photo astronomique
+
+![image](https://github.com/user-attachments/assets/2924f66d-9154-4c3f-a87f-107aac0c0953)
+
 ---------------------------------------------------------------------
 # Installation de la CT débian 12 dans Proxmox 7
 
