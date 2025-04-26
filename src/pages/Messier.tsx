@@ -96,13 +96,16 @@ export function Messier() {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
             {messierObjects.map((object) => {
               const photos = messierPhotos[object.id];
-              const hasPhotos = photos?.latestPhoto !== null;
+              const hasPhotos = photos && photos.latestPhoto !== null;
+              
+              // Classe additionnelle pour l'encadrement si l'objet a des photos
+              const buttonClass = `bg-gray-900/50 backdrop-blur-sm rounded-lg overflow-hidden hover:scale-105 transition-all duration-300 ${hasPhotos ? 'border-2 border-white' : ''}`;
               
               return (
                 <button
                   key={object.id}
                   onClick={() => setSelectedObject(object.id)}
-                  className="bg-gray-900/50 backdrop-blur-sm rounded-lg overflow-hidden hover:scale-105 transition-all duration-300"
+                  className={buttonClass}
                 >
                   <div className="aspect-square relative">
                     {hasPhotos ? (

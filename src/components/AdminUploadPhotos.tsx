@@ -245,7 +245,7 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
           <div>
             <label className="block mb-1 font-medium">Fichier</label>
             <p className="text-xs text-gray-400 mt-1">
-              Fichier inférieur à 5Mo (photo, timelaps, video)
+              Fichier inférieur à 100Mo (photo, timelaps, video)
             </p>
             <div className="relative">
               <input
