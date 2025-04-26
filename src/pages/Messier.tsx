@@ -144,6 +144,7 @@ export function Messier() {
                 {selectedObjectData?.id} - {selectedObjectData?.name}
               </h2>
               <p className="text-gray-300 mb-8">{selectedObjectData?.description}</p>
+              <p className="text-gray-300 mb-8">Localisé dans la constellation : {selectedObjectData?.constellation}</p>
 
               {selectedObjectPhotos?.latestPhoto ? (
                 <div className="mb-12">

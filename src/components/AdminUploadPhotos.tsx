@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ArrowLeft, Upload, Calendar, Camera, Film } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ArrowLeft, Upload, Calendar, Camera, Film, X } from 'lucide-react';
 import { pb } from '../lib/pocketbase';
 import { toast } from 'sonner';
 import confetti from 'canvas-confetti';
@@ -28,6 +28,18 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (formData.mediaFile) {
+      const url = URL.createObjectURL(formData.mediaFile);
+      setPreviewUrl(url);
+
+      return () => URL.revokeObjectURL(url);
+    } else {
+      setPreviewUrl(null);
+    }
+  }, [formData.mediaFile]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -54,12 +66,27 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
+    if (file && file.size > 100 * 1024 * 1024) {
+      toast.error('❌ Le fichier dépasse 100Mo.');
+      return;
+    }
     setFormData(prev => ({
       ...prev,
       mediaFile: file
     }));
   };
- 
+
+  const handleRemoveFile = () => {
+    setFormData(prev => ({
+      ...prev,
+      mediaFile: null
+    }));
+    const input = document.getElementById('mediaFile') as HTMLInputElement;
+    if (input) {
+      input.value = '';
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.mediaFile) {
@@ -78,7 +105,7 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
       formDataToSend.append('instrument', formData.instrument);
       formDataToSend.append('camera', formData.camera);
       formDataToSend.append('mediaType', formData.mediaType);
-      
+
       if (formData.mediaType === 'image') {
         formDataToSend.append('image', formData.mediaFile);
       } else {
@@ -87,7 +114,6 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
 
       await pb.collection('photos_astro').create(formDataToSend);
 
-      // Log the successful upload
       await pb.collection('admin_logs').create({
         action: 'Téléchargement média',
         status: true,
@@ -120,8 +146,6 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
     } catch (error) {
       console.error('Erreur:', error);
       toast.error(`❌ Une erreur est survenue lors du téléchargement de ${formData.mediaType === 'image' ? 'l\'image' : 'la vidéo'}`);
-      
-      // Log the failed upload
       await pb.collection('admin_logs').create({
         action: 'Téléchargement média',
         status: false,
@@ -133,20 +157,7 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
   };
 
   const objetOptions = [
-    { value: 'Galaxie', label: 'Galaxie' },
-    { value: 'Nébuleuse', label: 'Nébuleuse' },
-    { value: 'Planète', label: 'Planète' },
-    { value: 'Amas', label: 'Amas' },
-    { value: 'Lune', label: 'Lune' },
-    { value: 'Soleil', label: 'Soleil' },
-    { value: 'Etoile', label: 'Étoile' },
-    { value: 'Comète', label: 'Comète' },
-    { value: 'SkyCam', label: 'SkyCam' },
-    { value: 'Autre', label: 'Autre' },
-    { value: 'NGC', label: 'NGC' },
-    { value: 'IC', label: 'IC' },
-    { value: 'SH2', label: 'SH2' },
-    { value: 'M', label: 'M' }
+    'Galaxie', 'Nébuleuse', 'Planète', 'Amas', 'Lune', 'Soleil', 'Étoile', 'Comète', 'SkyCam', 'Autre', 'NGC', 'IC', 'SH2', 'M'
   ];
 
   return (
@@ -163,6 +174,7 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Titre */}
           <div>
             <label className="block mb-1 font-medium">Titre</label>
             <input
@@ -175,8 +187,9 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
             />
           </div>
 
+          {/* Objet */}
           <div>
-            <label className="block mb-1 font-medium">Type d'objet (sélection multiple possible)</label>
+            <label className="block mb-1 font-medium">Type d'objet</label>
             <select
               name="objet"
               multiple
@@ -187,16 +200,15 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
               required
             >
               {objetOptions.map(option => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
+                <option key={option} value={option}>{option}</option>
               ))}
             </select>
             <p className="text-xs text-gray-400 mt-1">
-              Maintenez Ctrl (ou Cmd sur Mac) pour sélectionner plusieurs objets
+              Maintenez Ctrl (ou Cmd) pour plusieurs sélections
             </p>
           </div>
 
+          {/* Date */}
           <div>
             <label className="block mb-1 font-medium">Date de prise</label>
             <div className="relative">
@@ -212,6 +224,7 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
             </div>
           </div>
 
+          {/* Type de media */}
           <div>
             <label className="block mb-1 font-medium">Type de média</label>
             <div className="flex gap-4">
@@ -222,10 +235,9 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
                   value="image"
                   checked={formData.mediaType === 'image'}
                   onChange={handleChange}
-                  className="text-blue-600"
                 />
                 <Camera className="w-5 h-5" />
-                <span>Image</span>
+                Image
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
@@ -234,19 +246,17 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
                   value="video"
                   checked={formData.mediaType === 'video'}
                   onChange={handleChange}
-                  className="text-blue-600"
                 />
                 <Film className="w-5 h-5" />
-                <span>Vidéo</span>
+                Vidéo
               </label>
             </div>
           </div>
 
-          <div>
+          {/* Fichier */}
+          <div className="col-span-1">
             <label className="block mb-1 font-medium">Fichier</label>
-            <p className="text-xs text-gray-400 mt-1">
-              Fichier inférieur à 100Mo (photo, timelaps, video)
-            </p>
+            <p className="text-xs text-gray-400 mt-1">Fichier ≤ 100Mo</p>
             <div className="relative">
               <input
                 type="file"
@@ -258,18 +268,29 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
               />
               <label
                 htmlFor="mediaFile"
-                className="flex items-center gap-2 px-4 py-2 rounded bg-gray-800 text-white border border-gray-700 cursor-pointer hover:bg-gray-700 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 rounded bg-gray-800 text-white border border-gray-700 cursor-pointer hover:bg-gray-700 transition"
               >
-                {formData.mediaType === 'image' ? (
-                  <Camera className="w-5 h-5" />
+                {formData.mediaFile ? (
+                  <>
+                    <X className="w-5 h-5" /> {formData.mediaFile.name}
+                  </>
                 ) : (
-                  <Film className="w-5 h-5" />
+                  <>
+                    {formData.mediaType === 'image' ? <Camera className="w-5 h-5" /> : <Film className="w-5 h-5" />}
+                    Sélectionner un fichier
+                  </>
                 )}
-                {formData.mediaFile ? formData.mediaFile.name : `Sélectionner un${formData.mediaType === 'image' ? 'e image' : 'e vidéo'}`}
               </label>
             </div>
+
+            {formData.mediaFile && (
+              <p className="text-xs text-gray-400 mt-1">
+                Poids : {(formData.mediaFile.size / (1024 * 1024)).toFixed(2)} Mo
+              </p>
+            )}
           </div>
 
+          {/* Description */}
           <div className="md:col-span-2">
             <label className="block mb-1 font-medium">Description</label>
             <textarea
@@ -282,6 +303,7 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
             />
           </div>
 
+          {/* Instrument */}
           <div>
             <label className="block mb-1 font-medium">Instrument</label>
             <input
@@ -293,8 +315,9 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
             />
           </div>
 
+          {/* Appareil Photo */}
           <div>
-            <label className="block mb-1 font-medium">Appareil photo/caméra</label>
+            <label className="block mb-1 font-medium">Caméra/Appareil photo</label>
             <input
               type="text"
               name="camera"
@@ -305,17 +328,44 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
           </div>
         </div>
 
+        {/* Preview */}
+        {previewUrl && (
+          <div className="mt-4 space-y-2">
+            {formData.mediaType === 'image' ? (
+              <img
+                src={previewUrl}
+                alt="Aperçu"
+                className="max-w-full max-h-80 object-contain rounded-lg border border-gray-700 transition-all duration-500 ease-in-out hover:scale-105"
+              />
+            ) : (
+              <video
+                src={previewUrl}
+                controls
+                className="max-w-full max-h-80 rounded-lg border border-gray-700 transition-all duration-500 ease-in-out hover:scale-105"
+              />
+            )}
+            <button
+              type="button"
+              onClick={handleRemoveFile}
+              className="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700 transition-colors"
+            >
+              Supprimer le fichier sélectionné
+            </button>
+          </div>
+        )}
+
+        {/* Submit */}
         <button
           type="submit"
           disabled={isLoading}
-          className={`w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2 ${
+          className={`w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg flex items-center justify-center gap-2 ${
             isLoading ? 'opacity-50 cursor-not-allowed' : ''
           }`}
         >
           {isLoading ? (
             <>
               <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white" />
-              Téléchargement en cours...
+              Téléchargement...
             </>
           ) : (
             <>
