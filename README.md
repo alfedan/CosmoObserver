@@ -38,7 +38,8 @@ rechercher quelque chose comme 192.168.X.XX
 
 vas dans le répertoire opt : 
 
-    cd /opt
+    cd /
+    cd opt
 
 télécharge pocketbase : 
 
