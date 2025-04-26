@@ -17,6 +17,8 @@ import { IC } from './pages/IC';
 import { Galaxy } from './pages/Galaxy';
 import { Nebula } from './pages/Nebula';
 import { Amas } from './pages/Amas';
+import { SolarSystem } from './pages/SolarSystem';
+import { Messier } from './pages/Messier';
 
 function NavigationMenu({ isOpen, onClose, currentPage, onPageChange }: { 
   isOpen: boolean; 
@@ -153,6 +155,8 @@ function App() {
       {currentPage === 'Galaxy' && <Galaxy />}
       {currentPage === 'Nebula' && <Nebula />}
       {currentPage === 'amas' && <Amas />}
+      {currentPage === 'solar_system' && <SolarSystem />}
+      {currentPage === 'messier' && <Messier />}
 
       <Toaster position="top-center" richColors theme="dark" />
     </div>

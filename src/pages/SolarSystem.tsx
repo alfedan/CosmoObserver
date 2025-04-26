@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Moon as MoonIcon, X, Play } from 'lucide-react';
+import { Sun, X, Play } from 'lucide-react';
 import { pb, type PhotoRecord } from '../lib/pocketbase';
 import { StarField } from '../components/StarField';
 
-export function Moon() {
+export function SolarSystem() {
   const [medias, setMedias] = useState<PhotoRecord[]>([]);
   const [selectedMedia, setSelectedMedia] = useState<PhotoRecord | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -12,7 +12,7 @@ export function Moon() {
     const fetchMedias = async () => {
       try {
         const resultList = await pb.collection('photos_astro').getList(1, 100, {
-          filter: 'objet ~ "Lune"',
+          filter: 'objet ~ "Lune" || objet ~ "Planète" || objet ~ "Soleil"',
           sort: '-date',
         });
         
@@ -42,11 +42,11 @@ export function Moon() {
       <div className="container mx-auto px-4 py-12">
         <header className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4 flex items-center justify-center gap-3">
-            <MoonIcon className="w-10 h-10 text-gray-300" />
-            Photos de la Lune
+            <Sun className="w-10 h-10 text-yellow-400" />
+            Système Solaire
           </h1>
-          <p className="text-xl text-gray-300">Exploration de notre satellite naturel</p>
-          <p className="text-xl text-gray-200">La Lune est un astre rocheux en orbite autour de la planète Terre. Elle a probablement été créée par la collision entre un très gros astéroïde (de la taille de Mars) et la Terre il y a 4,5 milliards d'années. Les débris de l'impact se sont agglomérés pour créer notre satellite naturel, la Lune.</p>
+          <p className="text-xl text-gray-300">Photos et vidéos de notre système solaire</p>
+          <p className="text-xl text-gray-200">Découvrez les merveilles de notre voisinage cosmique : le Soleil, la Lune et les planètes qui nous entourent.</p>
         </header>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
