@@ -203,13 +203,13 @@ objet → type : liste ; Sélection → Multiple ; Select → avec les valeurs :
 
 date → type : Date
 
-image → type : File ; choix : single
+image → type : File ; choix : single ; taille : 104857600
 
 instrument → type : Text
 
 camera → type : Text
 
-video → type : File ; choix : single
+video → type : File ; choix : single ; taille : 104857600
 
 mediaType → type : liste ; sélection : single ; Select : avec les caleurs : 
 
