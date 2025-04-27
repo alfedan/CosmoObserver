@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "axios": "^1.9.0",
     "canvas-confetti": "^1.9.3",
+    "framer-motion": "^12.9.2",
     "lucide": "^0.501.0",
     "lucide-react": "^0.344.0",
     "pocketbase": "^0.21.5",

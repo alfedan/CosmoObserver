@@ -19,6 +19,7 @@ import { Nebula } from './pages/Nebula';
 import { Amas } from './pages/Amas';
 import { SolarSystem } from './pages/SolarSystem';
 import { Messier } from './pages/Messier';
+import { ObservationPage } from './pages/ObservationPage';
 
 function NavigationMenu({ isOpen, onClose, currentPage, onPageChange }: { 
   isOpen: boolean; 
@@ -157,6 +158,7 @@ function App() {
       {currentPage === 'amas' && <Amas />}
       {currentPage === 'solar_system' && <SolarSystem />}
       {currentPage === 'messier' && <Messier />}
+      {currentPage === 'observation' && <ObservationPage />}
 
       <Toaster position="top-center" richColors theme="dark" />
     </div>

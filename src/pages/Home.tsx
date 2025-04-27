@@ -107,12 +107,12 @@ export function HomePage({ onPageChange }: { onPageChange: (page: string) => voi
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         <button 
-          onClick={() => onPageChange('galaxy')}
+          onClick={() => onPageChange('observation')}
           className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-lg transition-transform hover:scale-105"
         >
           <Star className="w-8 h-8 mb-4 text-yellow-300 mx-auto" />
-          <h2 className="text-2xl font-semibold mb-3">Galaxies</h2>
-          <p className="text-gray-300">Collection de photographies de galaxies lointaines et leurs structures spectaculaires.</p>
+          <h2 className="text-2xl font-semibold mb-3">Observation</h2>
+          <p className="text-gray-300">Tout les outils pour savoir que regarder ce soir. Météo, évenements, calendrier.</p>
         </button>
 
         <button 
@@ -134,20 +134,20 @@ export function HomePage({ onPageChange }: { onPageChange: (page: string) => voi
         </button>
       </div>
 
-<footer className="mt-16 text-center text-gray-400">
-  <p>
-    © 2025 Cosmos Observer by{' '}
-    <a
-      href="https://github.com/alfedan/CosmoObserver"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-blue-400 hover:underline"
-    >
-      Alfedan
-    </a>{' '}
-    - Tous droits réservés
-  </p>
-</footer>
+      <footer className="mt-16 text-center text-gray-400">
+        <p>
+          © 2025 Cosmos Observer by{' '}
+          <a
+            href="https://github.com/alfedan/CosmoObserver"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-400 hover:underline"
+          >
+            Alfedan
+          </a>{' '}
+          - Tous droits réservés
+        </p>
+      </footer>
     </div>
   );
 }
