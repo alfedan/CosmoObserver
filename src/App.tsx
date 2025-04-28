@@ -20,6 +20,8 @@ import { Amas } from './pages/Amas';
 import { SolarSystem } from './pages/SolarSystem';
 import { Messier } from './pages/Messier';
 import { ObservationPage } from './pages/ObservationPage';
+import { Weather } from './pages/Weather';
+import { Info } from './pages/Info';
 
 function NavigationMenu({ isOpen, onClose, currentPage, onPageChange }: { 
   isOpen: boolean; 
@@ -158,7 +160,9 @@ function App() {
       {currentPage === 'amas' && <Amas />}
       {currentPage === 'solar_system' && <SolarSystem />}
       {currentPage === 'messier' && <Messier />}
-      {currentPage === 'observation' && <ObservationPage />}
+      {currentPage === 'Observation' && <ObservationPage />}
+      {currentPage === 'Weather' && <Weather />}
+      {currentPage === 'info' && <Info />}
 
       <Toaster position="top-center" richColors theme="dark" />
     </div>

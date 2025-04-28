@@ -107,30 +107,30 @@ export function HomePage({ onPageChange }: { onPageChange: (page: string) => voi
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         <button 
-          onClick={() => onPageChange('observation')}
+          onClick={() => onPageChange('Weather')}
           className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-lg transition-transform hover:scale-105"
         >
           <Star className="w-8 h-8 mb-4 text-yellow-300 mx-auto" />
-          <h2 className="text-2xl font-semibold mb-3">Observation</h2>
-          <p className="text-gray-300">Tout les outils pour savoir que regarder ce soir. Météo, évenements, calendrier.</p>
+          <h2 className="text-2xl font-semibold mb-3">Météo</h2>
+          <p className="text-gray-300">La météo de la nuit pour planifier les observations</p>
         </button>
 
         <button 
-          onClick={() => onPageChange('solar_system')}
+          onClick={() => onPageChange('Observation')}
           className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-lg transition-transform hover:scale-105"
         >
           <Moon className="w-8 h-8 mb-4 text-gray-300 mx-auto" />
-          <h2 className="text-2xl font-semibold mb-3">Système Solaire</h2>
-          <p className="text-gray-300">Observations détaillées des planètes, de la Lune et du Soleil.</p>
+          <h2 className="text-2xl font-semibold mb-3">Observation</h2>
+          <p className="text-gray-300">Que regarder dans le ciel nocturne ?</p>
         </button>
 
         <button 
-          onClick={() => onPageChange('nebula')}
+          onClick={() => onPageChange('info')}
           className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-lg transition-transform hover:scale-105"
         >
           <Sun className="w-8 h-8 mb-4 text-orange-400 mx-auto" />
-          <h2 className="text-2xl font-semibold mb-3">Nébuleuses</h2>
-          <p className="text-gray-300">Captures des plus belles nébuleuses et leurs couleurs étonnantes.</p>
+          <h2 className="text-2xl font-semibold mb-3">Informations</h2>
+          <p className="text-gray-300">Les informations utilent pour planifier votre soirée.</p>
         </button>
       </div>
 
