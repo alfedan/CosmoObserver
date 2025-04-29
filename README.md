@@ -223,31 +223,45 @@ Initialiser un projet React :
 
     sudo apt install npm -y
 
-puis une fois installer : 
-
-    npm create vite@latest
-
 Installer les dépendances utiles : 
 
-    npm install
-    npm install pocketbase react-router-dom framer-motion
+    npm install pocketbase react-router-dom framer-motion sonner canvas-confetti recharts axios
 
 télécharge l'interface utilisateur : 
 
     git clone https://github.com/alfedan/CosmoObserver
 
+Modifier les paramètres de personalisation : 
+
+Modification login et mot de passe administrateur : 
+
+    cd /CosmosObserver
+    nano /src/config/auth.ts
+
+Modifier les paramètres de lieu : 
+
+    nano /src/config/settings.ts
+
+voici les paramètres :
+
+  city: "XXXXX", <-- le nom de la ville de résidence
+  latitude: YY.YYYY, <-- latitude de la ville de résidence
+  longitude: Z.ZZZZ, <-- longitude de la ville de résidence
+  timezone: "Europe/Paris", <-- fuseau horaire de la ville de résidence
+  openWeatherApiKey: "A1234567890B1234567890C" <-- votre clé API de OpenwWeather https://openweathermap.org/
+
+Modification de l'IP de la base de donnée PocketBase : 
+
+    nano /src/lib/pocketbase.ts
+
+et modifier l'IP :
+
+    export const pb = new PocketBase('http://127.0.0.1:8090'); <-- type http://192.168.X.X:8090 (accessible qu'en local) ou http://monsite.org:8090 (pour un acces en extérieur avec port ouvert et redirection fait dans le routeur)
+
 Installer l'interface utilisateur : 
 
     cd #
     cd cosmos-observer-site/CosmosObserver
-
-Installation des effet visuel : 
-
-    npm install sonner
-
-et : 
-
-    npm install canvas-confetti
 
 puis : 
 
@@ -263,7 +277,7 @@ accéder au site généré :
 
 -------------------------------------------------------------------------------------------------------------------------------------------------
 
-# Intégration du formulaire d'envoie de mail
+# Compiler la version définitive de CosmosObserver
 
 
 
