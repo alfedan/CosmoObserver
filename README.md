@@ -256,7 +256,7 @@ Modification de l'IP de la base de donnée PocketBase :
 
 et modifier l'IP :
 
-    export const pb = new PocketBase('http://127.0.0.1:8090'); 
+    export const pb = new PocketBase('http://127.0.0.1:8090'); <--- a modifier avec l'une des solution ci dessous.
     type http://192.168.X.X:8090 (accessible qu'en local) ou 
     http://monsite.org:8090 (pour un acces en extérieur avec port ouvert et redirection fait dans le routeur)
 
