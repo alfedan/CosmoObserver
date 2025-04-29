@@ -7,28 +7,38 @@ export function HomePage({ onPageChange }: { onPageChange: (page: string) => voi
   const [recentPhotos, setRecentPhotos] = useState<PhotoRecord[]>([]);
 
   useEffect(() => {
+    const abortController = new AbortController();
+
     async function fetchPhotos() {
       try {
         const latestPhoto = await pb.collection('photos_astro').getList(1, 1, {
-          sort: '-date'
+          sort: '-date',
+          requestKey: null, // évite l'autocancellation de PocketBase
         });
-        
+
         if (latestPhoto.items.length > 0) {
           setPhotoOfTheDay(latestPhoto.items[0] as PhotoRecord);
         }
 
         const recent = await pb.collection('photos_astro').getList(1, 2, {
           sort: '-date',
-          filter: `id != '${latestPhoto.items[0].id}'`
+          filter: `id != '${latestPhoto.items[0].id}'`,
+          requestKey: null,
         });
-        
+
         setRecentPhotos(recent.items as PhotoRecord[]);
       } catch (error) {
-        console.error('Erreur lors de la récupération des photos:', error);
+        if ((error as any)?.name !== 'AbortError') {
+          console.error('Erreur lors de la récupération des photos:', error);
+        }
       }
     }
 
     fetchPhotos();
+
+    return () => {
+      abortController.abort();
+    };
   }, []);
 
   return (
@@ -95,9 +105,9 @@ export function HomePage({ onPageChange }: { onPageChange: (page: string) => voi
                   })}
                 </p>
                 {photo.objet && (
-                <p className="text-xs text-gray-400 mt-1">
-                Objets : {Array.isArray(photo.objet) ? photo.objet.join(', ') : photo.objet}
-                </p>
+                  <p className="text-xs text-gray-400 mt-1">
+                    Objets : {Array.isArray(photo.objet) ? photo.objet.join(', ') : photo.objet}
+                  </p>
                 )}
               </div>
             ))}
@@ -130,7 +140,7 @@ export function HomePage({ onPageChange }: { onPageChange: (page: string) => voi
         >
           <Sun className="w-8 h-8 mb-4 text-orange-400 mx-auto" />
           <h2 className="text-2xl font-semibold mb-3">Informations</h2>
-          <p className="text-gray-300">Les informations utilent pour planifier votre soirée.</p>
+          <p className="text-gray-300">Les informations utiles pour planifier votre soirée.</p>
         </button>
       </div>
 
