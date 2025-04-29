@@ -46,16 +46,20 @@ vas dans le répertoire opt :
 
 télécharge pocketbase : 
 
-    wget https://github.com/pocketbase/pocketbase/releases/download/v0.22.11/pocketbase_0.22.11_linux_amd64.zip
+    wget https://github.com/pocketbase/pocketbase/releases/download/v0.27.2/pocketbase_0.27.2_linux_amd64.zip
 
 installe unzip et décompresse pocketbase : 
 
     apt update && apt install unzip -y
-    unzip pocketbase_0.22.11_linux_amd64.zip
+    unzip pocketbase_0.27.2_linux_amd64.zip
 
 Donne les bons droits au fichier : 
 
     chmod +x pocketbase
+
+vérifier la version PocketBase v0.27.2: 
+
+    ./pocketbase --version
 
 Lance-le pour tester :
 
@@ -106,7 +110,7 @@ Modification pour protection CORPS :
     cd /
     nano /opt/pb_data/.pb_cors.json
 
-et coller le comptenu : 
+et coller le comptenu en modifian l'IP 192.168... par la votre : 
 
     {
       "enabled": true,
@@ -186,43 +190,9 @@ ouvre la page web de pocketbase :
 
     http://192.168.X.XX:8090/\_/
 
-Dans le menu de gauche, clique sur "Collections", puis "Create"
+Dans le menu de gauche, clique sur "Settings", puis "Import collections"
 
-Nom de la collection : photos_astro
-
-Type de collection : base (par défaut)
-
-Coche auth pour etre le seul utilisateur a pouvoir poster
-
-Ajoute les champs un par un :
-
-titre → type : Text
-
-description → type : Text → options : Long text
-
-objet → type : liste ; Sélection → Multiple ; Select → avec les valeurs :
-
-    Galaxie, Nébuleuse, Planète, Amas, Lune, Soleil, Etoile, Comète, SkyCam, Autre, SH2, NGC, IC, M
-
-date → type : Date
-
-image → type : File ; choix : single ; taille : 104857600
-
-instrument → type : Text
-
-camera → type : Text
-
-video → type : File ; choix : single ; taille : 104857600
-
-mediaType → type : liste ; sélection : single ; Select : avec les caleurs : 
-
-    image, video
-
-Clique sur "Save"
-
-changer API rules de tout les champs en :
-
-    @request.auth.id != "" || @request.auth.id = ""
+cliquer sur "Load from JSON file" et fournir le fichier "pb_schema.json"
 
 # Tester l’ajout d’une photo astronomique : 
 
@@ -255,46 +225,6 @@ Clique sur l’enregistrement pour l’ouvrir
 Tu devrais voir une URL de fichier (quelque chose comme /api/files/xxxx/xxxxxx.jpg)
 
 Essaie de cliquer dessus : si tout va bien, l’image s’affiche !
-
-# créer la base de donner de sauvegarde des messages de contact
-
-dans l'interface de pocketbase cliquer sur "collections" puis "new colection"
-
-nom de la base : messages
-
-ajouter les champs : 
-
-text : name
-
-email : email
-
-text : subject
-
-text : message
-
-email : to
-
-changer API rules de tout les champs en :
-
-    @request.auth.id != "" || @request.auth.id = ""
-
-# créer la base de donnée du journal
-
-dans l'interface de pocketbase cliquer sur "collections" puis "new colection"
-
-nom de la base : admin_logs
-
-ajouter les champs : 
-
-text : action
-
-text : status
-
-text : details
-
-changer API rules de tout les champs en :
-
-    @request.auth.id != "" || @request.auth.id = ""
 
 ------------------------------------------------------------------------------------------------------------------------------------
 
