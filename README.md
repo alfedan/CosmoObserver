@@ -125,23 +125,6 @@ et coller le comptenu en modifian l'IP 192.168... par la votre :
       "credentials": true
     }
 
-Modification de la taille des entrée de la base
-
-    cd /
-    cd opt/pb_data
-
-créer le fichier config.json
-
-    nano config.json
-
-Coller le code 
-
-    {
-      "uploadMaxFileSize": 104857600
-    }
-
-sauvegarder le fichier avec "ctrl + x"
-
 redémarrer pocketbase
 
     sudo systemctl restart pocketbase
