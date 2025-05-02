@@ -45,21 +45,20 @@ export function ObservationPage() {
 
     fetchAndTranslate();
   }, []);
-// Traduction en francais du json
+
   const translateText = async (text: string) => {
     const res = await fetch('https://libretranslate.com/translate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         q: text,
-        source: 'auto',
+        source: 'en',
         target: 'fr',
         format: 'text'
       })
     });
+
     const data = await res.json();
-    console.log('Traduction de :', text);
-    console.log('Résultat:', data);
     return data.translatedText || text;
   };
 
