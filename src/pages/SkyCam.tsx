@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Camera, ChevronLeft, ChevronRight, RefreshCw, Play, X } from 'lucide-react';
 import { pb, type PhotoRecord } from '../lib/pocketbase';
 import { StarField } from '../components/StarField';
+import settings from '../config/settings';
 
 const IMAGES_PER_PAGE = 16;
 
@@ -76,7 +77,7 @@ export function SkyCam() {
           </div>
           <div className="aspect-video w-full relative">
             <iframe
-              src="http://alfedan.freeboxos.fr:1984/public.php"
+              src={settings.skycam}
               className="w-full h-full"
               key={lastRefresh.toISOString()}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

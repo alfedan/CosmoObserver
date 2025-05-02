@@ -157,7 +157,7 @@ export function AdminUploadPhotos({ onBack }: { onBack: () => void }) {
   };
 
   const objetOptions = [
-    'Galaxie', 'Nébuleuse', 'Planète', 'Amas', 'Lune', 'Soleil', 'Étoile', 'Comète', 'SkyCam', 'Autre', 'NGC', 'IC', 'SH2', 'M'
+    'Galaxie', 'Nébuleuse', 'Planète', 'Amas', 'Lune', 'Soleil', 'Etoile', 'Comète', 'SkyCam', 'Autre', 'NGC', 'IC', 'SH2', 'M'
   ];
 
   return (
