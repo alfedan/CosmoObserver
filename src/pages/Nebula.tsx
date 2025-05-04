@@ -14,6 +14,7 @@ export function Nebula() {
         const resultList = await pb.collection('photos_astro').getList(1, 100, {
           filter: 'objet ~ "Nébuleuse"',
           sort: '-date',
+          requestKey: null, // évite l'autocancellation de PocketBase
         });
         
         setMedias(resultList.items as PhotoRecord[]);

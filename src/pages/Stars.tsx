@@ -14,6 +14,7 @@ export function Stars() {
         const resultList = await pb.collection('photos_astro').getList(1, 100, {
           filter: 'objet ~ "Etoile"',
           sort: '-date',
+          requestKey: null, // évite l'autocancellation de PocketBase
         });
         
         setMedias(resultList.items as PhotoRecord[]);

@@ -25,6 +25,7 @@ export function SH2() {
         const resultList = await pb.collection('photos_astro').getList(1, 500, {
           filter: 'objet ~ "SH2"',
           sort: '-date',
+          requestKey: null, // évite l'autocancellation de PocketBase
         });
         
         const photos = resultList.items as PhotoRecord[];
