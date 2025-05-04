@@ -12,9 +12,9 @@ créer un mot de passe pour l'utilisateur root
 
 Template : Choisis Debian 12
 
-Disque : 64 Go (ou plus si tu prévois pas mal d’images)
+Disque : 64 Go (ou plus si tu prévois pas mal d’images et vidéo mais cela peut etre ajuster plus tard)
 
-CPU : 4 core mais 1 suffit si tu es passient
+CPU : 4 core mais 1 suffit si tu es passient (ce qui n'est pas mon cas)
 
 RAM : 4096 (4 Go pour le confort)
 
@@ -34,7 +34,7 @@ obtenir l'ip de la CT :
 
     ip a
 
-rechercher quelque chose comme 192.168.X.XX
+rechercher quelque chose comme 192.168.X.XX et mémorise le c'est important
 
 -----------------------------------------------------------------
 # Installation de PocketBase
@@ -99,18 +99,18 @@ Activer la config :
 
     systemctl restart nginx
 
-acces a pocketbase : 
+acces a pocketbase, ouvre un navigateur et va sur : 
 
     http://192.168.X.XX/_/
 
-Crée le compte administratif pour pocketbase
+Crée le compte administratif pour pocketbase, ne perd pas les données !
 
 Modification pour protection CORPS : 
 
     cd /
     nano /opt/pb_data/.pb_cors.json
 
-et coller le comptenu en modifian l'IP 192.168... par la votre : 
+et coller le comptenu en modifian l'IP 192.168.X.XX par la votre : 
 
     {
       "enabled": true,
@@ -165,6 +165,9 @@ vérifier qu’il tourne avec :
 
     systemctl status pocketbase
 
+tout est vert.
+"Ctrl + C" pour sortir de l'affichage et revenir aux commandes
+
 ---------------------------------------------------------------------------------------------------------------------------
 
 # créer la base de données des photo
@@ -175,7 +178,7 @@ ouvre la page web de pocketbase :
 
 Dans le menu de gauche, clique sur "Settings", puis "Import collections"
 
-cliquer sur "Load from JSON file" et fournir le fichier "pb_schema.json"
+cliquer sur "Load from JSON file" et fournir le fichier "pb_schema.json" disponible sur le github. cela va créer toutes les bases de données utile.
 
 # Tester l’ajout d’une photo astronomique : 
 
@@ -183,7 +186,7 @@ Dans le menu de gauche, clique sur ta collection photos_astro
 
 Clique sur "Create Record" (bouton ➕ en haut à droite)
 
-Remplis quelques champs :
+Remplis quelques champs pour test :
 
 titre : "Andromède"
 
@@ -216,8 +219,6 @@ Essaie de cliquer dessus : si tout va bien, l’image s’affiche !
 Créer un dossier pour le site React : 
 
     cd #
-    mkdir -p ~/cosmos-observer-site
-    cd ~/cosmos-observer-site
 
 Initialiser un projet React : 
 
@@ -227,6 +228,10 @@ Installer les dépendances utiles :
 
     npm install pocketbase react-router-dom framer-motion sonner canvas-confetti recharts axios
 
+ainsi que :
+
+    npm install --save rss-parser
+
 télécharge l'interface utilisateur : 
 
     git clone https://github.com/alfedan/CosmoObserver
@@ -235,7 +240,7 @@ Modifier les paramètres de personalisation :
 
 Modification login et mot de passe administrateur : 
 
-    cd /CosmosObserver
+    cd CosmoObserver
     nano /src/config/auth.ts
 
 Modifier les paramètres de lieu : 
@@ -249,23 +254,29 @@ voici les paramètres :
     longitude: Z.ZZZZ, <-- longitude de la ville de résidence
     timezone: "Europe/Paris", <-- fuseau horaire de la ville de résidence
     openWeatherApiKey: "A1234567890B1234567890C" <-- votre clé API de OpenwWeather https://openweathermap.org/
+    skycam:"http://Monsite.MonFAI.fr:PortDeRedirection/public.php" <-- l'adresse pour la AllSky si tu en a une (https://github.com/AllskyTeam/allsky)
 
 Modification de l'IP de la base de donnée PocketBase : 
 
     nano /src/lib/pocketbase.ts
 
-et modifier l'IP :
+et modifier les IP :
 
-    export const pb = new PocketBase('http://127.0.0.1:8090'); <--- a modifier avec l'une des solution ci dessous.
-    type http://192.168.X.X:8090 (accessible qu'en local) ou 
-    http://monsite.org:8090 (pour un acces en extérieur avec port ouvert et redirection fait dans le routeur)
+    import PocketBase from 'pocketbase';
+    
+    // Sélection dynamique de l'URL PocketBase
+    let pocketBaseUrl = '';
+    
+    if (window.location.hostname === 'Monsite.MonFAI.fr') { <-- a modifier suivant votre FAI pour un acces en externe
+      pocketBaseUrl = 'http://Monsite.MonFAI.fr:8090'; <-- même information que si dessus
+    } else if (window.location.hostname === '192.168.X.XX') { <-- a dodifier avec ce qui a été vue précédament pour un acces en interne
+      pocketBaseUrl = 'http://192.168.X.XX:8090'; <-- même information que si dessus
+    } else {
+      // Fallback local pour tests ou accès par IP différente
+      pocketBaseUrl = 'http://127.0.0.1:8090';
+    }
 
 Installer l'interface utilisateur : 
-
-    cd #
-    cd cosmos-observer-site/CosmosObserver
-
-puis : 
 
     npm install
 
@@ -281,13 +292,97 @@ accéder au site généré :
 
 # Compiler la version définitive de CosmosObserver
 
+Concevoir le build : 
 
-
-Concevoir le builde : 
-
-    npm run build
+    cd CosmoObserver
 
 puis : 
 
+    npm install
+
+corriger les vulnérabilité : 
+
+    npm audit fix
+
+puis :
+
+    npm audit fix --force
+
+Consevoir le build : 
+
+    npm run build
+
+S'il y a besoin de créer un nouveau build :
+
+    rm -rf dist
+    npm run build
+
+Installation du serveur : 
+
     npm install -g serve
     serve -s dist
+
+le site est accessible a l'adresse http://192.168.X.XX:3000
+
+Démarrage automatique du serveur : 
+
+    which serve
+
+tu dois avoir : /usr/local/bin/serve
+
+Crée un service systemd :
+
+    sudo nano /etc/systemd/system/serve-react.service
+
+et colle cela : 
+
+    [Unit]
+    Description=Serve React App
+    After=network.target
+    
+    [Service]
+    Type=simple
+    User=root
+    WorkingDirectory=/root/CosmoObserver
+    ExecStart=/usr/local/bin/serve -s dist -l 3000
+    Restart=always
+    
+    [Install]
+    WantedBy=multi-user.target
+
+Active et démarre le service : 
+
+    sudo systemctl daemon-reexec
+    sudo systemctl daemon-reload
+    sudo systemctl enable serve-react
+    sudo systemctl start serve-react
+
+Vérifie que tout fonctionne :
+
+    systemctl status serve-react
+
+et 
+
+    http://192.168.X.XX:3000
+
+Si besoin d'arreter le serveur : 
+
+    sudo systemctl stop serve-react
+
+puis cela pour le démarrer : 
+
+    sudo systemctl start serve-react
+
+profiter bien de l'application et que le ciel soit claire !
+
+quelque photo de l'application : 
+
+![image](https://github.com/user-attachments/assets/b0262a97-d705-4395-8db8-90f462d13393)
+
+![image](https://github.com/user-attachments/assets/06fbed7d-0e11-4323-ab58-29dcefbf53c9)
+
+![image](https://github.com/user-attachments/assets/738a7093-956d-4bfc-9e15-98b1a1425b6d)
+
+![image](https://github.com/user-attachments/assets/9804c9fd-b19f-4129-b49b-2abc0f969fde)
+
+![image](https://github.com/user-attachments/assets/68e79173-d14b-4c28-964e-893b0350fc7e)
