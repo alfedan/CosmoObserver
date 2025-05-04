@@ -375,6 +375,24 @@ puis cela pour le démarrer :
 
 profiter bien de l'application et que le ciel soit claire !
 
+----------------------------------------------------------------------------------------------------------------------------------
+
+# Installer l'aplication sur vos appareil.
+
+![image](https://github.com/user-attachments/assets/df29960b-e961-4447-b2ce-a8ac9e9c4b0b)
+
+sur apple, android et smartphone windows : 
+
+Accédez au site web via un navigateur.
+
+Cliquez sur option dans la barre d'outils, puis choisissez « Ajouter au Dock », "A l'écran d'accueil"...
+
+Cliquez sur Ajouter.
+
+Sur PC Windows créer un racourci sur le bureau, vous pouvez modifier l'icone avec l'icone fourni dans le répertoire img.
+
+----------------------------------------------------------------------------------------------------------------------------------
+
 quelque photo de l'application : 
 
 ![image](https://github.com/user-attachments/assets/b0262a97-d705-4395-8db8-90f462d13393)
