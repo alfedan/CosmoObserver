@@ -1,6 +1,20 @@
 import PocketBase from 'pocketbase';
 
-export const pb = new PocketBase('http://127.0.0.1:8090');
+// Sélection dynamique de l'URL PocketBase
+let pocketBaseUrl = '';
+
+if (window.location.hostname === 'alfedan.freeboxos.fr') {
+  pocketBaseUrl = 'http://alfedan.freeboxos.fr:8090';
+} else if (window.location.hostname === '192.168.1.40') {
+  pocketBaseUrl = 'http://192.168.1.40:8090';
+} else {
+  // Fallback local pour tests ou accès par IP différente
+  pocketBaseUrl = 'http://127.0.0.1:8090';
+}
+
+console.log(`[PocketBase] URL détectée : ${pocketBaseUrl}`);
+
+export const pb = new PocketBase(pocketBaseUrl);
 
 // Types pour nos collections
 export interface PhotoRecord {

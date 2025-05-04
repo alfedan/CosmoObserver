@@ -27,7 +27,8 @@ export function AdminDeletePhotos({ onBack }: { onBack: () => void }) {
     const fetchPhotos = async () => {
       try {
         const resultList = await pb.collection('photos_astro').getList(1, 50, {
-          sort: '-created'
+          sort: '-created',
+          requestKey: null // évite l'autocancellation de PocketBase
         });
         setPhotos(resultList.items as Photo[]);
       } catch (error) {

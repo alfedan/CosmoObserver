@@ -14,7 +14,7 @@ export function Galaxy() {
         const resultList = await pb.collection('photos_astro').getList(1, 100, {
           filter: 'objet ~ "Galaxie"',
           sort: '-date',
-          requestKey: null, // évite l'autocancellation de PocketBase
+          requestKey: null // évite l'autocancellation de PocketBase
         });
         
         setMedias(resultList.items as PhotoRecord[]);

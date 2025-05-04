@@ -21,7 +21,8 @@ export function AdminMessages({ onBack }: { onBack: () => void }) {
     const fetchMessages = async () => {
       try {
         const resultList = await pb.collection('messages').getList(1, 10, {
-          sort: '-created'
+          sort: '-created',
+          requestKey: null // évite l'autocancellation de PocketBase
         });
         setMessages(resultList.items as Message[]);
       } catch (error) {

@@ -22,7 +22,7 @@ export function Messier() {
         const resultList = await pb.collection('photos_astro').getList(1, 500, {
           filter: 'objet ~ "M"',
           sort: '-date',
-          requestKey: null, // évite l'autocancellation de PocketBase
+          requestKey: null // évite l'autocancellation de PocketBase
         });
         
         const photos = resultList.items as PhotoRecord[];

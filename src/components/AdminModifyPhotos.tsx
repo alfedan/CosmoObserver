@@ -50,7 +50,8 @@ export function AdminModifyPhotos({ onBack }: { onBack: () => void }) {
     const fetchPhotos = async () => {
       try {
         const resultList = await pb.collection('photos_astro').getList(1, 100, {
-          sort: '-created'
+          sort: '-created',
+          requestKey: null // évite l'autocancellation de PocketBase
         });
         setPhotos(resultList.items as PhotoRecord[]);
       } catch (error) {

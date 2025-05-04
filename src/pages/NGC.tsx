@@ -25,7 +25,7 @@ export function NGC() {
         const resultList = await pb.collection('photos_astro').getList(1, 500, {
           filter: 'objet ~ "NGC"',
           sort: '-date',
-          requestKey: null, // évite l'autocancellation de PocketBase
+          requestKey: null // évite l'autocancellation de PocketBase
         });
         
         const photos = resultList.items as PhotoRecord[];

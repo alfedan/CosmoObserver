@@ -20,7 +20,8 @@ export function AdminJournal({ onBack }: { onBack: () => void }) {
     const fetchLogs = async () => {
       try {
         const resultList = await pb.collection('admin_logs').getList(1, 50, {
-          sort: '-created'
+          sort: '-created',
+          requestKey: null // évite l'autocancellation de PocketBase
         });
         setLogs(resultList.items as LogEntry[]);
       } catch (error) {

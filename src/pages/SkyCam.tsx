@@ -20,7 +20,7 @@ export function SkyCam() {
         const resultList = await pb.collection('photos_astro').getList(currentPage, IMAGES_PER_PAGE, {
           filter: 'objet ~ "SkyCam"',
           sort: '-date',
-          requestKey: null, // évite l'autocancellation de PocketBase
+          requestKey: null // évite l'autocancellation de PocketBase
         });
         
         setMedias(resultList.items as PhotoRecord[]);
