@@ -5,6 +5,7 @@ import { pb, type PhotoRecord } from '../lib/pocketbase';
 export function HomePage({ onPageChange }: { onPageChange: (page: string) => void }) {
   const [photoOfTheDay, setPhotoOfTheDay] = useState<PhotoRecord | null>(null);
   const [recentPhotos, setRecentPhotos] = useState<PhotoRecord[]>([]);
+  const [totalPhotos, setTotalPhotos] = useState<number>(0);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -20,13 +21,14 @@ export function HomePage({ onPageChange }: { onPageChange: (page: string) => voi
           setPhotoOfTheDay(latestPhoto.items[0] as PhotoRecord);
         }
 
-        const recent = await pb.collection('photos_astro').getList(1, 2, {
+        const recent = await pb.collection('photos_astro').getList(1, 3, {
           sort: '-date',
           filter: `id != '${latestPhoto.items[0].id}'`,
           requestKey: null,
         });
 
         setRecentPhotos(recent.items as PhotoRecord[]);
+        setTotalPhotos(latestPhoto.totalItems);
       } catch (error) {
         if ((error as any)?.name !== 'AbortError') {
           console.error('Erreur lors de la récupération des photos:', error);
@@ -144,8 +146,13 @@ export function HomePage({ onPageChange }: { onPageChange: (page: string) => voi
         </button>
       </div>
 
-      <footer className="mt-16 text-center text-gray-400">
-        <p>
+      <footer className="mt-16 text-center">
+        <div className="bg-gray-900/50 backdrop-blur-sm p-4 rounded-lg inline-block">
+          <p className="text-xl font-semibold text-blue-400 mb-2">
+            {totalPhotos} photos dans la collection
+          </p>
+        </div>
+        <p className="mt-4 text-gray-400">
           © 2025 Cosmos Observer by{' '}
           <a
             href="https://github.com/alfedan/CosmoObserver"

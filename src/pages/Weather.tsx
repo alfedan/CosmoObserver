@@ -115,7 +115,10 @@ export function Weather() {
       <StarField />
       <div className="container mx-auto px-4 py-12">
         <header className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-2">Prévisions Météo sur 48h</h1>
+          <h1 className="text-4xl font-bold mb-4 flex items-center justify-center gap-3">
+            <Sun className="w-10 h-10 text-yellow-400" />
+           Prévisions Météo sur 48h
+          </h1>
           <p className="text-xl text-gray-400">Lieu : {forecast.city.name}</p>
         </header>
 

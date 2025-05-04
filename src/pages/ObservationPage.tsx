@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Moon } from 'lucide-react';
 import { StarField } from '../components/StarField';
 import settings from '../config/settings';
 
@@ -8,11 +9,13 @@ interface FeedItem {
   contentSnippet: string;
   title_fr: string;
   content_fr: string;
+  pubDate: string;
 }
 
 export function ObservationPage() {
   const [items, setItems] = useState<FeedItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchAndTranslate = async () => {
@@ -30,7 +33,15 @@ export function ObservationPage() {
             return {
               ...item,
               title_fr: translatedTitle,
-              content_fr: translatedContent
+              content_fr: translatedContent,
+              pubDate: new Date(item.pubDate).toLocaleDateString('fr-FR', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+              })
             };
           })
         );
@@ -39,7 +50,7 @@ export function ObservationPage() {
       } catch (err) {
         console.error('Erreur lors du chargement du flux RSS:', err);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
@@ -66,14 +77,20 @@ export function ObservationPage() {
     <div className="relative min-h-screen bg-black text-white overflow-hidden">
       <StarField />
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-12">
-        <h1 className="text-3xl font-bold mb-6">Événements célestes à venir</h1>
+          <h1 className="text-4xl font-bold mb-4 flex items-center justify-center gap-3">
+            <Moon className="w-10 h-10 text-gray-400" />
+           Événements célestes à venir
+          </h1>
         {loading ? (
           <p>Chargement en cours...</p>
         ) : (
           <ul className="space-y-6">
             {items.map((item, idx) => (
               <li key={idx} className="bg-gray-900/70 p-4 rounded-lg shadow-md border border-gray-700">
-                <h2 className="text-xl font-semibold mb-2">{item.title_fr}</h2>
+                <div className="flex justify-between items-start mb-2">
+                  <h2 className="text-xl font-semibold">{item.title_fr}</h2>
+                  <span className="text-sm text-gray-400">{item.pubDate}</span>
+                </div>
                 <p className="text-sm text-gray-300 mb-2">{item.content_fr}</p>
                 <a
                   href={item.link}

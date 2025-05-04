@@ -32,10 +32,10 @@ export function Info() {
             </div>
             <div className="aspect-[4/3] w-full">
               <iframe
-                width="1500" 
-                height="1050" 
+                width="800" 
+                height="600" 
                 frameborder="0" 
-                scrolling="no" 
+                scrolling="yes" 
                 marginheight="0" 
                 marginwidth="0" 
                 src={`https://virtualsky.lco.global/embed/index.html?longitude=${settings.longitude}&latitude=${settings.latitude}&projection=polar&meteorshowers=true&live=true&constellations=true&constellationlabels=true&az=2.711825981875677`}
