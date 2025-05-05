@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Camera, Star, Sun, Moon, Menu, X, Salad as GalaxyIcon, Telescope, Contact, User, ChevronRight, Home, ChevronDown } from 'lucide-react';
+import { Camera, Star, Sun, Moon, Menu, X, Salad as GalaxyIcon, Telescope, Contact, User, ChevronRight, Home, ChevronDown, Search } from 'lucide-react';
 import { pb, type PhotoRecord } from './lib/pocketbase';
 import { Contact as ContactPage } from './pages/Contact';
 import { SkyCam } from './pages/SkyCam';
@@ -22,6 +22,7 @@ import { Messier } from './pages/Messier';
 import { ObservationPage } from './pages/ObservationPage';
 import { Weather } from './pages/Weather';
 import { Info } from './pages/Info';
+import { Search as SearchPage } from './pages/Search';
 
 function NavigationMenu({ isOpen, onClose, currentPage, onPageChange }: { 
   isOpen: boolean; 
@@ -33,6 +34,7 @@ function NavigationMenu({ isOpen, onClose, currentPage, onPageChange }: {
 
   const mainMenuItems = [
     { name: 'Accueil', icon: Home, category: 'home' },
+    { name: 'Recherche', icon: Search, category: 'search' },
     { name: 'Galaxies', icon: GalaxyIcon, category: 'Galaxy' },
     { name: 'Nébuleuses', icon: Star, category: 'Nebula' },
     { name: 'Messier', icon: Telescope, category: 'messier' },
@@ -145,6 +147,7 @@ function App() {
       />
       
       {currentPage === 'home' && <HomePage onPageChange={setCurrentPage} />}
+      {currentPage === 'search' && <SearchPage />}
       {currentPage === 'contact' && <ContactPage />}
       {currentPage === 'nightcam' && <SkyCam />}
       {currentPage === 'moon' && <MoonPage />}
