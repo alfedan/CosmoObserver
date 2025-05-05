@@ -34,13 +34,13 @@ function NavigationMenu({ isOpen, onClose, currentPage, onPageChange }: {
 
   const mainMenuItems = [
     { name: 'Accueil', icon: Home, category: 'home' },
-    { name: 'Recherche', icon: Search, category: 'search' },
     { name: 'Galaxies', icon: GalaxyIcon, category: 'Galaxy' },
     { name: 'Nébuleuses', icon: Star, category: 'Nebula' },
     { name: 'Messier', icon: Telescope, category: 'messier' },
     { name: 'Lune', icon: Moon, category: 'moon' },
     { name: 'SkyCam', icon: Camera, category: 'nightcam' },
     { name: 'Autres', icon: ChevronDown, submenu: true },
+    { name: 'Recherche', icon: Search, category: 'search' },
     { name: 'Administrateur', icon: User, category: 'admin' },
     { name: 'Contact', icon: Contact, category: 'contact' }
   ];
