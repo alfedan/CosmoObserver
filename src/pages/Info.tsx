@@ -2,6 +2,7 @@ import React from 'react';
 import { Info as InfoIcon } from 'lucide-react';
 import { StarField } from '../components/StarField';
 import settings from '../config/settings';
+import myImage from './Images/colorbar.png';
 
 export function Info() {
   // Calculate the year for the light pollution map
@@ -76,6 +77,12 @@ export function Info() {
                 title="Carte du ciel"
                 loading="lazy"
               />
+            </div>
+            <div>
+            <img src={myImage} alt="Color Bar" />
+            <p className="p-4 bg-gray-800/50 text-sm text-gray-400">
+                Noir = beaucoup d'étoiles visible ; Blanc = tres peut d'étoiles visible
+            </p>
             </div>
             <div className="p-4 bg-gray-800/50 text-sm text-gray-400">
               Source: Light pollution maps by David Lorenz : djlorenz.github.io
