@@ -241,11 +241,11 @@ Modifier les paramètres de personalisation :
 Modification login et mot de passe administrateur : 
 
     cd CosmoObserver
-    nano /src/config/auth.ts
+    nano src/config/auth.ts
 
 Modifier les paramètres de lieu : 
 
-    nano /src/config/settings.ts
+    nano src/config/settings.ts
 
 voici les paramètres :
 
@@ -258,7 +258,7 @@ voici les paramètres :
 
 Modification de l'IP de la base de donnée PocketBase : 
 
-    nano /src/lib/pocketbase.ts
+    nano src/lib/pocketbase.ts
 
 et modifier les IP :
 
@@ -308,6 +308,10 @@ puis :
 
     npm audit fix --force
 
+Vérifie qu'il n'y a plus de vulnérabilité : 
+
+    npm install
+
 Consevoir le build : 
 
     npm run build
@@ -334,7 +338,7 @@ Crée un service systemd :
 
     sudo nano /etc/systemd/system/serve-react.service
 
-et colle cela : 
+et colle cela, tu peux modifier le port 3000 si tu veux : 
 
     [Unit]
     Description=Serve React App
