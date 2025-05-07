@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Salad as GalaxyIcon, X, Play } from 'lucide-react';
+import { Salad as GalaxyIcon, X, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import { pb, type PhotoRecord } from '../lib/pocketbase';
 import { StarField } from '../components/StarField';
 
@@ -7,14 +7,16 @@ export function Galaxy() {
   const [medias, setMedias] = useState<PhotoRecord[]>([]);
   const [selectedMedia, setSelectedMedia] = useState<PhotoRecord | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 100;
 
   useEffect(() => {
     const fetchMedias = async () => {
       try {
-        const resultList = await pb.collection('photos_astro').getList(1, 100, {
+        const resultList = await pb.collection('photos_astro').getList(1, 1000, {
           filter: 'objet ~ "Galaxie"',
           sort: '-date',
-          requestKey: null // évite l'autocancellation de PocketBase
+          requestKey: null
         });
         
         setMedias(resultList.items as PhotoRecord[]);
@@ -27,6 +29,12 @@ export function Galaxy() {
 
     fetchMedias();
   }, []);
+
+  const totalPages = Math.ceil(medias.length / itemsPerPage);
+  const paginatedMedias = medias.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   if (isLoading) {
     return (
@@ -51,7 +59,7 @@ export function Galaxy() {
         </header>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {medias.map((media) => (
+          {paginatedMedias.map((media) => (
             <button
               key={media.id}
               onClick={() => setSelectedMedia(media)}
@@ -96,6 +104,42 @@ export function Galaxy() {
             </button>
           ))}
         </div>
+
+        {totalPages > 1 && (
+          <div className="mt-8 flex justify-center items-center gap-4">
+            <button
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="p-2 bg-gray-800 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-700 transition-colors"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+            
+            <div className="flex items-center gap-2">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`w-10 h-10 rounded-lg ${
+                    currentPage === page
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-800 hover:bg-gray-700'
+                  } transition-colors`}
+                >
+                  {page}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="p-2 bg-gray-800 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-700 transition-colors"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          </div>
+        )}
 
         {selectedMedia && (
           <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center">

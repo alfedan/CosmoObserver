@@ -4,7 +4,7 @@ import { pb, type PhotoRecord } from '../lib/pocketbase';
 import { StarField } from '../components/StarField';
 import settings from '../config/settings';
 
-const IMAGES_PER_PAGE = 16;
+const IMAGES_PER_PAGE = 100;
 
 export function SkyCam() {
   const [medias, setMedias] = useState<PhotoRecord[]>([]);
@@ -17,10 +17,10 @@ export function SkyCam() {
   useEffect(() => {
     const fetchMedias = async () => {
       try {
-        const resultList = await pb.collection('photos_astro').getList(currentPage, IMAGES_PER_PAGE, {
+        const resultList = await pb.collection('photos_astro').getList(1, 1000, {
           filter: 'objet ~ "SkyCam"',
           sort: '-date',
-          requestKey: null // évite l'autocancellation de PocketBase
+          requestKey: null
         });
         
         setMedias(resultList.items as PhotoRecord[]);
@@ -33,12 +33,12 @@ export function SkyCam() {
     };
 
     fetchMedias();
-  }, [currentPage]);
+  }, []);
 
-  const handlePageChange = (newPage: number) => {
-    setCurrentPage(newPage);
-    setIsLoading(true);
-  };
+  const paginatedMedias = medias.slice(
+    (currentPage - 1) * IMAGES_PER_PAGE,
+    currentPage * IMAGES_PER_PAGE
+  );
 
   const handleRefresh = () => {
     setLastRefresh(new Date());
@@ -90,7 +90,7 @@ export function SkyCam() {
         <div className="mt-16">
           <h2 className="text-2xl font-semibold mb-8 text-center">Archives Photos</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {medias.map((media) => (
+            {paginatedMedias.map((media) => (
               <button
                 key={media.id}
                 onClick={() => setSelectedMedia(media)}
@@ -137,9 +137,9 @@ export function SkyCam() {
           </div>
 
           {totalPages > 1 && (
-            <div className="flex justify-center items-center gap-4 mt-12">
+            <div className="mt-8 flex justify-center items-center gap-4">
               <button
-                onClick={() => handlePageChange(currentPage - 1)}
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
                 className="p-2 bg-gray-800 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-700 transition-colors"
               >
@@ -150,7 +150,7 @@ export function SkyCam() {
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                   <button
                     key={page}
-                    onClick={() => handlePageChange(page)}
+                    onClick={() => setCurrentPage(page)}
                     className={`w-10 h-10 rounded-lg ${
                       currentPage === page
                         ? 'bg-blue-600 text-white'
@@ -163,7 +163,7 @@ export function SkyCam() {
               </div>
 
               <button
-                onClick={() => handlePageChange(currentPage + 1)}
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
                 className="p-2 bg-gray-800 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-700 transition-colors"
               >
