@@ -11,6 +11,9 @@ CONFIG_FILES=(
 BACKUP_DIR="./backup_config_$(date +%s)"
 mkdir -p "$BACKUP_DIR"
 
+echo "🔍 arret du serveur pour maintenance..."
+systemctl stop serve-react || { echo "❌ Erreur lors de l'arret du serveur"; exit 1; }
+
 echo "🗄️ Sauvegarde des fichiers de configuration..."
 for file in "${CONFIG_FILES[@]}"; do
   if [ -f "$file" ]; then
@@ -48,5 +51,8 @@ done
 
 echo "🧹 Nettoyage..."
 rm -r "$BACKUP_DIR"
+
+echo "🔍 démarrage du serveur..."
+systemctl start serve-react || { echo "❌ Erreur lors du démarrage du serveur"; exit 1; }
 
 echo "✅ Mise à jour terminée avec succès !"
