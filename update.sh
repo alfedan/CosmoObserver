@@ -25,7 +25,17 @@ for file in "${CONFIG_FILES[@]}"; do
 done
 
 echo "🔄 Mise à jour du dépôt depuis GitHub..."
-git pull origin main || { echo "❌ Erreur Git"; exit 1; }
+if ! git pull origin main; then
+  echo "⚠️ Des modifications locales empêchent la mise à jour."
+  echo "👉 Veux-tu forcer la mise à jour en ignorant les changements ? (o/n)"
+  read -r confirm
+  if [ "$confirm" = "o" ]; then
+    git reset --hard HEAD && git pull origin main || { echo "❌ Erreur Git (forcée)"; exit 1; }
+  else
+    echo "❌ Annulé. Merci de valider ou sauvegarder vos changements."
+    exit 1
+  fi
+fi
 
 echo "📦 Installation des dépendances..."
 npm install || { echo "❌ npm install a échoué"; exit 1; }
