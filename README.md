@@ -1,4 +1,5 @@
-# CosmosObserver
+![image](https://github.com/user-attachments/assets/7d51ccea-98e5-4b7c-af96-23680bb3daf7)
+
 interface pour photo astronomique
 
 ![image](https://github.com/user-attachments/assets/2924f66d-9154-4c3f-a87f-107aac0c0953)
