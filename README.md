@@ -398,6 +398,46 @@ Sur PC Windows créer un racourci sur le bureau, vous pouvez modifier l'icone av
 
 ----------------------------------------------------------------------------------------------------------------------------------
 
+# mise a jour aidé.
+
+Version indiqué sur la page d'accueil de l'application et comparable a la relase de GitHub.
+
+![image](https://github.com/user-attachments/assets/0cae5b00-6f06-4e1c-8424-f66e5ece5019)
+
+![image](https://github.com/user-attachments/assets/fe0337c6-709a-43b1-beee-9c2a8c277bd8)
+
+pour démarrer la mise a jour : 
+
+    cd #
+    cd CosmoObserver
+    chmod +x update.sh
+    ./update.sh
+
+Si une erreur interviens lors de la détection de vulnérabilité, récupérer le nom du dossier backup : 
+
+    dir
+
+et lancet la commande suivante en modifian le nom du répertoire de backup :
+
+    cd backup123456
+    cp auth.ts /CosmoObserver/src/config/auth.ts
+    cp settings.ts /CosmoObserver/src/config/settings.ts
+    cp pocketbase.ts /CosmoObserver/src/lib/pocketbase.ts
+
+Réalisé la correction manuel des vulnérabilitées : 
+
+    cd #
+    cd CosmoObserver
+    npm audit fix
+    npm autif fix --force
+
+relancer la mise a jour : 
+
+    rm -rf dist
+    ./update.sh
+
+----------------------------------------------------------------------------------------------------------------------------------
+
 quelque photo de l'application : 
 
 ![image](https://github.com/user-attachments/assets/b0262a97-d705-4395-8db8-90f462d13393)
