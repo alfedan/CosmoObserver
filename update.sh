@@ -22,7 +22,7 @@ for file in "${CONFIG_FILES[@]}"; do
 done
 
 echo "🔄 Mise à jour du dépôt depuis GitHub..."
-git pull origin main |  | { echo "❌ Erreur Git"; exit 1; }
+git pull origin main || { echo "❌ Erreur Git"; exit 1; }
 
 echo "📁 Restauration des fichiers de configuration..."
 for file in "${CONFIG_FILES[@]}"; do
@@ -31,6 +31,15 @@ for file in "${CONFIG_FILES[@]}"; do
     echo "✅ Restauré : $file"
   fi
 done
+
+echo "📦 Installation des dépendances..."
+npm install || { echo "❌ npm install a échoué"; exit 1; }
+
+echo "🔄 Vérification des vulnérabilitées..."
+npm audit fix || { echo "❌ npm audit a échoué"; exit 1; }
+
+echo "🔧 Correction des vulnérabilitées..."
+npm audit fix --force || { echo "❌ npm audit a échoué"; exit 1; }
 
 echo "📦 Installation des dépendances..."
 npm install || { echo "❌ npm install a échoué"; exit 1; }
