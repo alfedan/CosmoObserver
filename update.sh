@@ -39,7 +39,7 @@ echo "🔄 Vérification des vulnérabilitées..."
 npm audit fix || { echo "❌ npm audit a échoué"; exit 1; }
 
 echo "🔧 Correction des vulnérabilitées..."
-npm audit fix --force || { echo "❌ npm audit a échoué"; exit 1; }
+npm audit fix --force || { echo "❌ npm audit fix a échoué"; exit 1; }
 
 echo "📦 Installation des dépendances..."
 npm install || { echo "❌ npm install a échoué"; exit 1; }
