@@ -39,8 +39,13 @@ echo "🔄 Vérification des vulnérabilitées..."
 npm audit fix || { echo "❌ npm audit a échoué"; exit 1; }
 
 echo "🔧 Correction des vulnérabilités..."
-if ! npm audit fix --force; then
-  echo "⚠️ npm audit fix --force a échoué. Continuer quand même..."
+npm audit fix --force --yes
+AUDIT_STATUS=$?
+
+if [ $AUDIT_STATUS -ne 0 ]; then
+  echo "⚠️ npm audit fix --force a échoué, mais le processus continue..."
+else
+  echo "✅ npm audit fix --force terminé avec succès."
 fi
 
 echo "📦 Installation des dépendances..."
