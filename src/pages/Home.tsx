@@ -1,20 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Camera, Star, Sun, Moon } from 'lucide-react';
 import { pb, type PhotoRecord } from '../lib/pocketbase';
+import { version } from '../components/Release.json'
 
 export function HomePage({ onPageChange }: { onPageChange: (page: string) => void }) {
   const [photoOfTheDay, setPhotoOfTheDay] = useState<PhotoRecord | null>(null);
   const [recentPhotos, setRecentPhotos] = useState<PhotoRecord[]>([]);
   const [totalPhotos, setTotalPhotos] = useState<number>(0);
-  const [version, setVersion] = useState<string>('');
 
   useEffect(() => {
-    // Fetch version from Release.txt
-    fetch('/src/components/Release.txt')
-      .then(response => response.text())
-      .then(version => setVersion(version.trim()))
-      .catch(error => console.error('Error loading version:', error));
-
     const abortController = new AbortController();
 
     async function fetchPhotos() {
