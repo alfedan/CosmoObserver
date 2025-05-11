@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { pb, type PhotoRecord } from "../lib/pocketbase";
-import { StarField } from "../components/StarField";
-import { format } from "date-fns";
-import { X } from "lucide-react";
+import { Undo2 } from "lucide-react";
 import React from "react";
 
 type RecentGalleryProps = {
@@ -17,7 +15,7 @@ export function RecentGallery({ onPageChange }: RecentGalleryProps) {
     const fetchMedias = async () => {
       try {
         const resultList = await pb.collection("photos_astro").getList(1, 10, {
-          sort: "-created",
+          sort: "-date",
           requestKey: null,
         });
         setMedias(resultList.items as PhotoRecord[]);
@@ -34,7 +32,7 @@ export function RecentGallery({ onPageChange }: RecentGalleryProps) {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen text-white">
-        Chargement des photos...
+        Chargement des médias...
       </div>
     );
   }
@@ -46,60 +44,74 @@ export function RecentGallery({ onPageChange }: RecentGalleryProps) {
       </h1>
 
       <button
-        onClick={() => onPageChange("Home")}
+        onClick={() => onPageChange("home")}
         className="mb-8 px-4 py-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors flex items-center gap-2"
       >
-        <X className="w-5 h-5" />
+        <Undo2 className="w-5 h-5" />
         Retour à l'accueil
       </button>
 
       <div className="grid gap-10">
-        {medias.map((photo) => (
-          <div
-            key={photo.id}
-            className="bg-gray-900/50 p-4 rounded-lg shadow-md backdrop-blur-sm"
-          >
-            <img
-              src={pb.files.getUrl(photo, photo.image)}
-              alt={photo.titre}
-              className="w-full h-auto rounded-lg mb-4"
-            />
+        {medias.map((media) => {
+          const mediaUrl = pb.files.getUrl(media, media.image);
 
-            <h2 className="text-xl font-semibold">{photo.titre}</h2>
+          return (
+            <div
+              key={media.id}
+              className="bg-gray-900/50 p-4 rounded-lg shadow-md backdrop-blur-sm"
+            >
+              {media.mediaType === "video" ? (
+                <video
+                  src={mediaUrl}
+                  controls
+                  className="w-full h-auto rounded-lg mb-4"
+                >
+                  Votre navigateur ne supporte pas la lecture vidéo.
+                </video>
+              ) : (
+                <img
+                  src={mediaUrl}
+                  alt={media.titre}
+                  className="w-full h-auto rounded-lg mb-4"
+                />
+              )}
 
-            <p className="text-sm text-gray-400 mb-1">
-              Observée le{" "}
-              {new Date(photo.date).toLocaleDateString("fr-FR", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </p>
+              <h2 className="text-xl font-semibold">{media.titre}</h2>
 
-            {photo.objet && (
-              <p className="text-sm text-gray-300">
-                Objets :{" "}
-                {Array.isArray(photo.objet)
-                  ? photo.objet.join(", ")
-                  : photo.objet}
+              <p className="text-sm text-gray-400 mb-1">
+                Observée le{" "}
+                {new Date(media.date).toLocaleDateString("fr-FR", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
               </p>
-            )}
 
-            {photo.monture && (
-              <p className="text-sm text-gray-300">Monture : {photo.monture}</p>
-            )}
+              {media.objet && (
+                <p className="text-sm text-gray-300">
+                  Objets :{" "}
+                  {Array.isArray(media.objet)
+                    ? media.objet.join(", ")
+                    : media.objet}
+                </p>
+              )}
 
-            {photo.camera && (
-              <p className="text-sm text-gray-300">Caméra : {photo.camera}</p>
-            )}
+              {media.monture && (
+                <p className="text-sm text-gray-300">Monture : {media.monture}</p>
+              )}
 
-            {photo.commentaire && (
-              <p className="text-sm text-gray-200 mt-2">
-                💬 Commentaire : {photo.commentaire}
-              </p>
-            )}
-          </div>
-        ))}
+              {media.camera && (
+                <p className="text-sm text-gray-300">Caméra : {media.camera}</p>
+              )}
+
+              {media.commentaire && (
+                <p className="text-sm text-gray-200 mt-2">
+                  💬 Commentaire : {media.commentaire}
+                </p>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
