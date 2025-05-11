@@ -2,8 +2,14 @@ import { useEffect, useState } from "react";
 import { pb, type PhotoRecord } from "../lib/pocketbase";
 import { StarField } from "../components/StarField";
 import { format } from "date-fns";
+import { X } from "lucide-react";
+import React from "react";
 
-export function RecentGallery() {
+type RecentGalleryProps = {
+  onPageChange: (page: string) => void;
+};
+
+export function RecentGallery({ onPageChange }: RecentGalleryProps) {
   const [medias, setMedias] = useState<PhotoRecord[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -38,13 +44,15 @@ export function RecentGallery() {
       <h1 className="text-3xl font-bold text-center mb-8">
         🌌 Galerie : 10 Dernières Observations
       </h1>
+
       <button
-             onClick={() => onPageChange('Home')}
-              className="mb-8 px-4 py-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors flex items-center gap-2"
-            >
-              <X className="w-5 h-5" />
-              Retour a l'accueil
+        onClick={() => onPageChange("Home")}
+        className="mb-8 px-4 py-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors flex items-center gap-2"
+      >
+        <X className="w-5 h-5" />
+        Retour à l'accueil
       </button>
+
       <div className="grid gap-10">
         {medias.map((photo) => (
           <div
