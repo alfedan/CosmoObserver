@@ -68,6 +68,7 @@ export function HomePage({ onPageChange }: { onPageChange: (page: string) => voi
                   src={pb.files.getUrl(photoOfTheDay, photoOfTheDay.image)}
                   alt={photoOfTheDay.titre}
                   className="w-full h-[400px] object-cover rounded-lg mb-4"
+                  onClick={() => onPageChange('RecentGallery')}
                 />
                 <p className="text-lg text-gray-300">{photoOfTheDay.titre}</p>
                 <p className="text-sm text-gray-400">{photoOfTheDay.description}</p>
@@ -98,6 +99,7 @@ export function HomePage({ onPageChange }: { onPageChange: (page: string) => voi
                   src={pb.files.getUrl(photo, photo.image)}
                   alt={photo.titre}
                   className="w-full h-32 object-cover rounded-lg mb-2"
+                  onClick={() => onPageChange('RecentGallery')}
                 />
                 <p className="text-sm text-gray-300">{photo.titre}</p>
                 <p className="text-xs text-gray-400">
@@ -138,7 +140,7 @@ export function HomePage({ onPageChange }: { onPageChange: (page: string) => voi
         </button>
 
         <button 
-          onClick={() => onPageChange('info')}
+          onClick={() => onPageChange('Info')}
           className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-lg transition-transform hover:scale-105"
         >
           <Sun className="w-8 h-8 mb-4 text-orange-400 mx-auto" />

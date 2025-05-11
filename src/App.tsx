@@ -23,6 +23,7 @@ import { ObservationPage } from './pages/ObservationPage';
 import { Weather } from './pages/Weather';
 import { Info } from './pages/Info';
 import { Search as SearchPage } from './pages/Search';
+import { RecentGallery } from './pages/RecentGallery';
 
 function NavigationMenu({ isOpen, onClose, currentPage, onPageChange }: { 
   isOpen: boolean; 
@@ -166,6 +167,7 @@ function App() {
       {currentPage === 'Observation' && <ObservationPage />}
       {currentPage === 'Weather' && <Weather />}
       {currentPage === 'info' && <Info />}
+      {currentPage === 'RecentGallery' && <RecentGallery />}
 
       <Toaster position="top-center" richColors theme="dark" />
     </div>
