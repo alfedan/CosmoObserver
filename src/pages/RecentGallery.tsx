@@ -40,7 +40,7 @@ export function RecentGallery({ onPageChange }: { onPageChange: (page: string) =
       </h1>
 
             <button
-              onClick={() => setSelectedObject(null)}
+              onClick={() => onPageChange('home')}
               className="mb-8 px-4 py-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors flex items-center gap-2"
             >
               <Undo2 className="w-5 h-5" />
@@ -54,7 +54,7 @@ export function RecentGallery({ onPageChange }: { onPageChange: (page: string) =
           return (
             <div
               key={media.id}
-              className="bg-gray-900/50 p-4 rounded-lg shadow-md backdrop-blur-sm"
+              className="bg-gray-900/50 p-4 rounded-lg shadow-x1/20 backdrop-blur-sm ring-2 ring-blue-500"
             >
               {media.mediaType === "video" ? (
                 <video
