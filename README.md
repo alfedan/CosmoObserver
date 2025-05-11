@@ -413,27 +413,35 @@ pour démarrer la mise a jour :
     chmod +x update.sh
     ./update.sh
 
-Si une erreur interviens lors de la détection de vulnérabilité, récupérer le nom du dossier backup : 
+Si une erreur interviens lors de la détection de vulnérabilité, vérifier la présence du dossier backup : 
 
     dir
 
-et lancet la commande suivante en modifian le nom du répertoire de backup :
+et lancet la commande suivante pour restorer le backup :
 
-    cd backup123456
+    cd backup
     cp -f auth.ts ~/CosmoObserver/src/config/
     cp -f settings.ts ~/CosmoObserver/src/config/settings.ts
     cp -f pocketbase.ts ~/CosmoObserver/src/lib/pocketbase.ts
 
-Réalisé la correction manuel des vulnérabilitées : 
+Réalisé la correction manuel des vulnérabilitées en suivant les étapes une a une : 
+
+se positionner dans le répertoire :
 
     cd #
     cd CosmoObserver
+
+Réaliser un audit de vulnérabilités : 
+    
     npm audit fix
+
+Corriger les vulnérabilités : 
+    
     npm autif fix --force
 
 relancer la mise a jour : 
 
-    rm -rf dist
+    chmod +x update.sh
     ./update.sh
 
 ----------------------------------------------------------------------------------------------------------------------------------
