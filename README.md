@@ -437,7 +437,7 @@ Réaliser un audit de vulnérabilités :
 
 Corriger les vulnérabilités : 
     
-    npm autif fix --force
+    npm autit fix --force
 
 relancer la mise a jour : 
 
