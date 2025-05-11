@@ -420,9 +420,9 @@ Si une erreur interviens lors de la détection de vulnérabilité, récupérer l
 et lancet la commande suivante en modifian le nom du répertoire de backup :
 
     cd backup123456
-    cp auth.ts /CosmoObserver/src/config/auth.ts
-    cp settings.ts /CosmoObserver/src/config/settings.ts
-    cp pocketbase.ts /CosmoObserver/src/lib/pocketbase.ts
+    cp -f auth.ts ~/CosmoObserver/src/config/
+    cp -f settings.ts ~/CosmoObserver/src/config/settings.ts
+    cp -f pocketbase.ts ~/CosmoObserver/src/lib/pocketbase.ts
 
 Réalisé la correction manuel des vulnérabilitées : 
 
