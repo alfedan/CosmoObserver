@@ -8,7 +8,7 @@ CONFIG_FILES=(
 )
 
 # Dossier temporaire de sauvegarde
-BACKUP_DIR="./backup_config_$(date +%s)"
+BACKUP_DIR="./backup"
 mkdir -p "$BACKUP_DIR"
 
 echo "🔍 arret du serveur pour maintenance..."
