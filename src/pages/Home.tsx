@@ -127,7 +127,7 @@ export function HomePage({ onPageChange }: { onPageChange: (page: string) => voi
         >
           <Star className="w-8 h-8 mb-4 text-yellow-300 mx-auto" />
           <h2 className="text-2xl font-semibold mb-3">Météo</h2>
-          <p className="text-gray-300">La météo de la nuit pour planifier les observations</p>
+          <p className="text-gray-300">La météo pour planifier les observations</p>
         </button>
 
         <button 

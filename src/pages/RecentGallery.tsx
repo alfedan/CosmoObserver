@@ -44,7 +44,7 @@ export function RecentGallery({ onPageChange }: RecentGalleryProps) {
       </h1>
 
       <button
-        onClick={() => onPageChange("home")}
+        onClick={() => onPageChange("HomePage")}
         className="mb-8 px-4 py-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors flex items-center gap-2"
       >
         <Undo2 className="w-5 h-5" />
