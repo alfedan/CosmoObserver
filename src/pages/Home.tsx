@@ -140,7 +140,7 @@ export function HomePage({ onPageChange }: { onPageChange: (page: string) => voi
         </button>
 
         <button
-          onClick={() => onPageChange('Info')}
+          onClick={() => onPageChange('info')}
           className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-lg transition-transform hover:scale-105"
         >
           <Sun className="w-8 h-8 mb-4 text-orange-400 mx-auto" />
