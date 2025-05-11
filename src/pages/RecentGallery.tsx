@@ -3,11 +3,7 @@ import { pb, type PhotoRecord } from "../lib/pocketbase";
 import { Undo2 } from "lucide-react";
 import React from "react";
 
-type RecentGalleryProps = {
-  onPageChange: (page: string) => void;
-};
-
-export function RecentGallery({ onPageChange }: RecentGalleryProps) {
+export function RecentGallery({ onPageChange }: { onPageChange: (page: string) => void }) {
   const [medias, setMedias] = useState<PhotoRecord[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -43,13 +39,13 @@ export function RecentGallery({ onPageChange }: RecentGalleryProps) {
         🌌 Galerie : 10 Dernières Observations
       </h1>
 
-      <button
-        onClick={() => onPageChange("HomePage")}
-        className="mb-8 px-4 py-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors flex items-center gap-2"
-      >
-        <Undo2 className="w-5 h-5" />
-        Retour à l'accueil
-      </button>
+            <button
+              onClick={() => setSelectedObject(null)}
+              className="mb-8 px-4 py-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors flex items-center gap-2"
+            >
+              <Undo2 className="w-5 h-5" />
+              Retour à l'accueil
+            </button>
 
       <div className="grid gap-10">
         {medias.map((media) => {

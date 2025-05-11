@@ -139,7 +139,7 @@ export function HomePage({ onPageChange }: { onPageChange: (page: string) => voi
           <p className="text-gray-300">Que regarder dans le ciel nocturne ?</p>
         </button>
 
-        <button 
+        <button
           onClick={() => onPageChange('Info')}
           className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-lg transition-transform hover:scale-105"
         >

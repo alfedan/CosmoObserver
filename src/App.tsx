@@ -167,7 +167,7 @@ function App() {
       {currentPage === 'Observation' && <ObservationPage />}
       {currentPage === 'Weather' && <Weather />}
       {currentPage === 'info' && <Info />}
-      {currentPage === 'RecentGallery' && <RecentGallery />}
+      {currentPage === 'RecentGallery' && <RecentGallery onPageChange={setCurrentPage}/>}
 
       <Toaster position="top-center" richColors theme="dark" />
     </div>
