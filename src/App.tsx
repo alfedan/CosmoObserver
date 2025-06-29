@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Camera, Star, Sun, Moon, Menu, X, Salad as GalaxyIcon, Telescope, Contact, User, ChevronRight, Home, ChevronDown, Search } from 'lucide-react';
+import { Camera, Star, Sun, Moon, Menu, X, Salad as GalaxyIcon, Telescope, Contact, User, ChevronRight, Home, ChevronDown, Search, Trophy } from 'lucide-react';
 import { pb, type PhotoRecord } from './lib/pocketbase';
 import { Contact as ContactPage } from './pages/Contact';
 import { SkyCam } from './pages/SkyCam';
@@ -24,6 +24,7 @@ import { Weather } from './pages/Weather';
 import { Info } from './pages/Info';
 import { Search as SearchPage } from './pages/Search';
 import { RecentGallery } from './pages/RecentGallery';
+import { Rewards } from './pages/Rewards';
 
 function NavigationMenu({ isOpen, onClose, currentPage, onPageChange }: { 
   isOpen: boolean; 
@@ -43,7 +44,8 @@ function NavigationMenu({ isOpen, onClose, currentPage, onPageChange }: {
     { name: 'Autres', icon: ChevronDown, submenu: true },
     { name: 'Recherche', icon: Search, category: 'search' },
     { name: 'Administrateur', icon: User, category: 'admin' },
-    { name: 'Contact', icon: Contact, category: 'contact' }
+    { name: 'Contact', icon: Contact, category: 'contact' },
+    { name: 'Récompenses', icon: Trophy, category: 'rewards' }
   ];
 
   const othersSubmenu = [
@@ -168,6 +170,7 @@ function App() {
       {currentPage === 'Weather' && <Weather />}
       {currentPage === 'info' && <Info />}
       {currentPage === 'RecentGallery' && <RecentGallery onPageChange={setCurrentPage}/>}
+      {currentPage === 'rewards' && <Rewards />}
 
       <Toaster position="top-center" richColors theme="dark" />
     </div>
