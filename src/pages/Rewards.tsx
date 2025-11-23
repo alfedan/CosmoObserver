@@ -1,6 +1,15 @@
-import React, { useState } from 'react';
-import { Trophy, Star, Award, Medal, Crown, Gift } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Trophy, Star, Award, Medal, Crown, Gift, Telescope } from 'lucide-react';
 import { StarField } from '../components/StarField';
+import { pb } from '../lib/pocketbase';
+
+interface CatalogProgress {
+  name: string;
+  current: number;
+  total: number;
+  percentage: number;
+  icon: string;
+}
 
 interface Achievement {
   id: string;
@@ -14,6 +23,8 @@ interface Achievement {
 }
 
 export function Rewards() {
+  const [catalogProgress, setCatalogProgress] = useState<CatalogProgress[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [achievements] = useState<Achievement[]>([
     {
       id: 'first_photo',
@@ -111,6 +122,85 @@ export function Rewards() {
     }
   };
 
+  useEffect(() => {
+    const fetchCatalogProgress = async () => {
+      try {
+        const photos = await pb.collection('photos_astro').getFullList({
+          sort: '-created',
+          requestKey: null
+        });
+
+        const messierObjects = new Set<string>();
+        const icObjects = new Set<string>();
+        const ngcObjects = new Set<string>();
+        const sh2Objects = new Set<string>();
+
+        photos.forEach((photo: any) => {
+          const title = photo.titre || '';
+
+          const messierMatch = title.match(/M\s*(\d+)/i);
+          if (messierMatch) {
+            messierObjects.add(`M${messierMatch[1]}`);
+          }
+
+          const icMatch = title.match(/IC\s*(\d+)/i);
+          if (icMatch) {
+            icObjects.add(`IC${icMatch[1]}`);
+          }
+
+          const ngcMatch = title.match(/NGC\s*(\d+)/i);
+          if (ngcMatch) {
+            ngcObjects.add(`NGC${ngcMatch[1]}`);
+          }
+
+          const sh2Match = title.match(/SH2[\s-]*(\d+)/i);
+          if (sh2Match) {
+            sh2Objects.add(`SH2-${sh2Match[1]}`);
+          }
+        });
+
+        const catalogs: CatalogProgress[] = [
+          {
+            name: 'Messier',
+            current: messierObjects.size,
+            total: 110,
+            percentage: Math.round((messierObjects.size / 110) * 100),
+            icon: 'M'
+          },
+          {
+            name: 'NGC',
+            current: ngcObjects.size,
+            total: 7840,
+            percentage: Math.round((ngcObjects.size / 7840) * 100),
+            icon: 'NGC'
+          },
+          {
+            name: 'IC',
+            current: icObjects.size,
+            total: 5386,
+            percentage: Math.round((icObjects.size / 5386) * 100),
+            icon: 'IC'
+          },
+          {
+            name: 'Sharpless',
+            current: sh2Objects.size,
+            total: 313,
+            percentage: Math.round((sh2Objects.size / 313) * 100),
+            icon: 'SH2'
+          }
+        ];
+
+        setCatalogProgress(catalogs);
+      } catch (error) {
+        console.error('Erreur lors du calcul des progressions:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCatalogProgress();
+  }, []);
+
   const unlockedCount = achievements.filter(a => a.unlocked).length;
   const totalCount = achievements.length;
   const completionPercentage = Math.round((unlockedCount / totalCount) * 100);
@@ -126,6 +216,48 @@ export function Rewards() {
             Récompenses
           </h1>
           <p className="text-xl text-gray-300">Vos accomplissements en astronomie</p>
+
+          <div className="mt-12 mb-12">
+            <h2 className="text-2xl font-semibold mb-6">Progression des Catalogues</h2>
+            {isLoading ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {catalogProgress.map((catalog) => (
+                  <div
+                    key={catalog.name}
+                    className="bg-blue-900/30 backdrop-blur-sm rounded-lg p-6 border-2 border-blue-400 hover:scale-105 transition-all duration-300"
+                  >
+                    <div className="text-center">
+                      <div className="inline-flex p-4 rounded-full mb-4 bg-blue-400/20">
+                        <Telescope className="w-8 h-8 text-blue-400" />
+                      </div>
+
+                      <h3 className="text-xl font-semibold mb-2">{catalog.name}</h3>
+                      <p className="text-sm text-gray-300 mb-4">{catalog.icon}</p>
+
+                      <div className="mb-4">
+                        <div className="relative w-full bg-gray-700 rounded-full h-3 mb-2">
+                          <div
+                            className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full transition-all duration-500"
+                            style={{ width: `${catalog.percentage}%` }}
+                          />
+                        </div>
+                        <p className="text-lg font-bold text-blue-400">
+                          {catalog.current} / {catalog.total}
+                        </p>
+                        <p className="text-xs text-gray-400">
+                          {catalog.percentage}% complété
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
           
           <div className="mt-8 bg-gray-900/50 backdrop-blur-sm rounded-lg p-6 max-w-md mx-auto">
             <h2 className="text-2xl font-semibold mb-4">Progression Globale</h2>
